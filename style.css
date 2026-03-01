@@ -1,0 +1,619 @@
+/* ==== VARIABLES GLOBALES ==== */
+/* Palette professionnelle : vert agricole, bleu confiance */
+:root {
+    --bg-color: #0e0e1a;
+    /* Fond très sombre avec nuance violette */
+    --text-color: #f0f0f5;
+    /* Blanc légèrement bleu */
+    --primary-color: #2E7D32;
+    /* Vert foncé */
+    --primary-hover: #3E8E41;
+    --accent-color: #4CAF50;
+    /* Vert clair */
+    --glass-bg: rgba(20, 15, 40, 0.65);
+    /* Semi-transparent violet foncé */
+    --glass-border: rgba(46, 125, 50, 0.2);
+    /* Bordure verte subtile */
+    --gradient-main: linear-gradient(135deg, #2E7D32, #4CAF50);
+    /* Le fameux dégradé agricole */
+    
+    /* Espacements améliorés */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    --spacing-xxl: 4rem;
+    
+    /* Typographie hiérarchique */
+    --font-size-xs: 0.8rem;
+    --font-size-sm: 0.9rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.2rem;
+    --font-size-xl: 1.5rem;
+    --font-size-2xl: 2rem;
+    --font-size-3xl: 2.5rem;
+    --font-size-4xl: 3rem;
+}
+
+/* ==== RESET GLOBAL ==== */
+/* On enlève les marges par défaut du navigateur */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+    /* Notre belle police d'écriture */
+}
+
+html {
+    scroll-behavior: smooth;
+    /* Active le défilement fluide lors d'un clic sur un lien du menu */
+}
+
+body {
+    background-color: var(--bg-color);
+    background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(153, 69, 255, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(20, 241, 149, 0.06) 0%, transparent 50%);
+    background-attachment: fixed;
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow-x: hidden;
+    /* Empêche le défilement horizontal */
+}
+
+/* ==== NAVIGATION ==== */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) 5%;
+    background: var(--glass-bg);
+    /* Effet verre */
+    backdrop-filter: blur(10px);
+    /* Floute l'arrière-plan */
+    border-bottom: 1px solid var(--glass-border);
+    position: fixed;
+    /* Reste en haut au défilement */
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    /* Toujours au-dessus du reste */
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.logo .dot {
+    color: var(--primary-color);
+}
+
+.nav-links {
+    list-style: none;
+    /* Enlève les puces de la liste */
+    display: flex;
+    gap: var(--spacing-lg);
+    align-items: center;
+}
+
+.nav-links li a {
+    color: var(--text-color);
+    text-decoration: none;
+    /* Enlève le soulignement */
+    font-weight: 600;
+    transition: color 0.3s ease;
+    /* Animation douce */
+}
+
+.nav-links li a:hover {
+    color: var(--primary-color);
+}
+
+/* Boutons spéciaux */
+.btn-connect,
+.btn-primary,
+.btn-secondary {
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-connect {
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color) !important;
+}
+
+.btn-connect:hover {
+    background: rgba(20, 241, 149, 0.1);
+    box-shadow: 0 0 15px rgba(20, 241, 149, 0.4);
+}
+
+/* ==== SECTION HERO (Accueil principal) ==== */
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    padding: 0 5%;
+    margin-top: 60px;
+    background-image: linear-gradient(rgba(14, 14, 26, 0.85), rgba(14, 14, 26, 0.6)), url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=1920&h=1024&fit=crop');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* La décoration brillante derrière le texte */
+.hero-glow {
+    position: absolute;
+    width: 60vw;
+    height: 60vw;
+    background: radial-gradient(circle, rgba(153, 69, 255, 0.25) 0%, rgba(20, 241, 149, 0.1) 40%, rgba(14, 14, 26, 0) 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    filter: blur(80px);
+}
+
+.hero-content h1 {
+    font-size: var(--font-size-4xl);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: var(--spacing-lg);
+}
+
+.hero-content .highlight {
+    background: var(--gradient-main);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    /* Texte avec le dégradé principal */
+}
+
+.hero-content p {
+    font-size: var(--font-size-lg);
+    color: #b3bac2;
+    max-width: 600px;
+    margin: 0 auto var(--spacing-xl) auto;
+    /* Centre le paragraphe */
+}
+
+/* ==== SECTION MARKETPLACE ==== */
+.marketplace {
+    padding: 5rem 5%;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.section-header h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.section-header p {
+    color: #b3bac2;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+/* Design de la Carte */
+.project-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    overflow: hidden;
+    /* Empêche l'image de dépasser des bords arrondis */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border-color: var(--primary-color);
+    /* La bordure devient verte au survol */
+}
+
+.card-image {
+    height: 180px;
+    width: 100%;
+    /* On utilisera de vraies images plus tard, en attendant un fond coloré */
+}
+
+.card-content {
+    padding: 1.5rem;
+}
+
+.tag {
+    background: rgba(46, 160, 67, 0.2);
+    color: var(--primary-color);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.project-card h3 {
+    margin: 1rem 0 0.5rem 0;
+    font-size: 1.3rem;
+}
+
+.location {
+    font-size: 0.9rem;
+    color: #b3bac2;
+    margin-bottom: 1.5rem;
+}
+
+/* Données Capteurs */
+.sensor-data {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    /* Fond un peu plus sombre */
+    border-radius: 8px;
+}
+
+.sensor {
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Infos Investissement */
+.investment-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    border-top: 1px solid var(--glass-border);
+    padding-top: 1rem;
+}
+
+.investment-info .label {
+    display: block;
+    font-size: 0.8rem;
+    color: #b3bac2;
+}
+
+.investment-info .value {
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+.btn-invest {
+    width: 100%;
+    /* Prend toute la largeur de la carte */
+    padding: 0.8rem;
+    background: var(--gradient-main);
+    border: none;
+    color: white;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn-invest:hover {
+    box-shadow: 0 0 25px rgba(153, 69, 255, 0.5), 0 0 40px rgba(20, 241, 149, 0.3);
+    transform: translateY(-3px);
+}
+
+/* ==== SECTION LE CONCEPT ==== */
+.concept-section {
+    padding: 5rem 5%;
+    background-color: rgba(20, 15, 40, 0.4);
+    /* Un fond violet foncé très subtil */
+    border-top: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.concept-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+    margin-top: 3rem;
+}
+
+.step {
+    text-align: center;
+    padding: 2rem;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.step:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-color);
+}
+
+.step-number {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent-color);
+    color: white;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    font-weight: 800;
+    box-shadow: 0 0 15px rgba(31, 111, 235, 0.5);
+}
+
+.step h3 {
+    margin: 1rem 0;
+    font-size: 1.3rem;
+    color: var(--text-color);
+}
+
+.step p {
+    color: #b3bac2;
+    font-size: 0.95rem;
+}
+
+/* ==== SYSTÈME DE NOTIFICATIONS ==== */
+.notification-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 9999;
+}
+
+.notification {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border-left: 4px solid var(--primary-color);
+    color: var(--text-color);
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    min-width: 250px;
+    transform: translateX(120%);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.notification.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.notification.info {
+    border-left-color: var(--accent-color);
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+.btn-primary {
+    background: var(--gradient-main);
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    box-shadow: 0 0 25px rgba(153, 69, 255, 0.5), 0 0 50px rgba(20, 241, 149, 0.2);
+    transform: translateY(-2px);
+    /* Monte le bouton un peu */
+}
+
+.btn-secondary {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-color);
+    backdrop-filter: blur(5px);
+}
+
+.btn-primary:active,
+.btn-secondary:active,
+.btn-invest:active,
+.btn-connect:active {
+    transform: translateY(2px) scale(0.98);
+    /* Petit effet de pression au clic réel */
+}
+
+.btn-secondary:hover {
+    background: rgba(240, 246, 252, 0.1);
+    border-color: rgba(240, 246, 252, 0.3);
+}
+
+/* Responsive pour les petits écrans */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        /* Cache les liens sur mobile pour le moment */
+    }
+
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        /* Boutons l'un en dessous de l'autre */
+    }
+}
+
+/* ==== MODALE D'INVESTISSEMENT ==== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: #161b22;
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    padding: 2.5rem;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    transform: translateY(-50px);
+    transition: transform 0.3s ease;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateY(0);
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    color: #b3bac2;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+    color: var(--text-color);
+}
+
+#modal-project-title {
+    font-size: 1.5rem;
+    background: var(--gradient-main);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+}
+
+.modal-subtitle {
+    color: #b3bac2;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+}
+
+/* Options de Paiement Mobile Money */
+.payment-methods {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.payment-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.payment-option img {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.payment-option span {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Cacher le bouton radio natif */
+.payment-option input[type="radio"] {
+    display: none;
+}
+
+/* Style appliqué quand l'option est sélectionnée */
+.payment-option:has(input[type="radio"]:checked) {
+    border-color: var(--primary-color);
+    background: rgba(153, 69, 255, 0.1);
+    box-shadow: 0 0 10px rgba(153, 69, 255, 0.2);
+}
+
+/* Montant */
+.investment-amount {
+    margin-bottom: 2rem;
+}
+
+.investment-amount label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.investment-amount input {
+    width: 100%;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    color: white;
+    font-size: 1.1rem;
+    font-family: 'Outfit';
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.investment-amount input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(153, 69, 255, 0.2);
+}
+
+.investment-amount small {
+    display: block;
+    color: #b3bac2;
+    margin-top: 0.5rem;
+}
+
+#btn-confirm-invest {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+}

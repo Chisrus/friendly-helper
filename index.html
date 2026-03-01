@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agrikura | Investissez dans l'Agriculture Connectée</title>
+    <!-- On relie notre fichier CSS ici -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="new-sections.css">
+    <!-- On importe une belle police d'écriture depuis Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Barre de navigation -->
+    <nav class="navbar">
+        <div class="logo">Agrikura<span class="dot">.</span></div>
+        <ul class="nav-links">
+            <li><a href="#concept" data-fr="Le Concept" data-en="How it Works">Le Concept</a></li>
+            <li><a href="#marketplace" data-fr="Marketplace" data-en="Marketplace">Marketplace</a></li>
+            <li><a href="#statistics" data-fr="Impact" data-en="Impact">Impact</a></li>
+            <li><a href="#team" data-fr="Équipe" data-en="Team">Équipe</a></li>
+            <li><a href="#risk-guarantees" data-fr="Sécurité" data-en="Security">Sécurité</a></li>
+            <li><a href="#faq" data-fr="FAQ" data-en="FAQ">FAQ</a></li>
+            <li><a href="#" class="btn-connect" data-fr="Espace Investisseur" data-en="Investor Space">Espace Investisseur</a></li>
+            <li class="language-selector">
+                <select id="language-select" class="lang-select">
+                    <option value="fr">🇫🇷 FR</option>
+                    <option value="en">🇬🇧 EN</option>
+                </select>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Section Héroïque (La première chose qu'on voit) -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1>La Finance Agricole <br><span class="highlight">Réinventée</span>.</h1>
+            <p>Soutenez des projets agricoles réels, suivez les rendements via nos capteurs connectés, et participez à
+                l'agriculture de demain grâce à notre plateforme innovante.</p>
+            <div class="hero-buttons">
+                <a href="#marketplace" class="btn-primary">Explorer les Champs</a>
+                <a href="#concept" class="btn-secondary">Découvrir le Concept</a>
+            </div>
+        </div>
+        <!-- Un élément décoratif pour un look "Tech/Agri" -->
+        <div class="hero-glow"></div>
+    </header>
+
+    <!-- Section Le Concept -->
+    <section id="concept" class="concept-section">
+        <div class="section-header">
+            <h2>Comment ça <span class="highlight">Marche ?</span></h2>
+            <p>Un processus simple et transparent garanti par notre technologie.</p>
+        </div>
+        <div class="concept-steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Choisissez un Projet</h3>
+                <p>Parcourez la place de marché et sélectionnez une culture avec un rendement qui vous convient.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Financez en Direct</h3>
+                <p>Investissez directement via votre espace personnel. Pas d'intermédiaires, plus de gains partagés.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Suivez et Récoltez</h3>
+                <p>Vérifiez les données du champ connectées aux capteurs et recevez vos rendements à la récolte.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Marketplace -->
+    <section id="marketplace" class="marketplace">
+        <div class="section-header">
+            <h2>Projets <span class="highlight">Disponibles</span></h2>
+            <p>Découvrez les exploitations agricoles qui n'attendent que votre soutien.</p>
+        </div>
+
+        <div class="projects-grid">
+            <!-- Carte Projet 1 -->
+            <div class="project-card">
+                <div class="card-image" style="background-color: #2ea04333;"></div>
+                <div class="card-content">
+                    <span class="tag">Cacao</span>
+                    <h3>Domaine Solaire de Yamoussoukro</h3>
+                    <p class="location">📍 Yamoussoukro, Côte d'Ivoire</p>
+
+                    <div class="sensor-data">
+                        <div class="sensor"><span class="icon">💧</span> 65% Humidité</div>
+                        <div class="sensor"><span class="icon">🌡️</span> 28°C Temp.</div>
+                    </div>
+
+                    <div class="investment-info">
+                        <div>
+                            <span class="label">Rendement Est.</span>
+                            <span class="value highlight">12.5%</span>
+                        </div>
+                        <div>
+                            <span class="label">Financement</span>
+                            <span class="value">60%</span>
+                        </div>
+                    </div>
+
+                    <button class="btn-invest">Investir Maintenant</button>
+                </div>
+            </div>
+
+            <!-- Carte Projet 2 -->
+            <div class="project-card">
+                <div class="card-image" style="background-color: #1f6feb33;"></div>
+                <div class="card-content">
+                    <span class="tag">Hévéa</span>
+                    <h3>Plantation Connectée San-Pédro</h3>
+                    <p class="location">📍 San-Pédro, Côte d'Ivoire</p>
+
+                    <div class="sensor-data">
+                        <div class="sensor"><span class="icon">💧</span> 72% Humidité</div>
+                        <div class="sensor"><span class="icon">🌡️</span> 26°C Temp.</div>
+                    </div>
+
+                    <div class="investment-info">
+                        <div>
+                            <span class="label">Rendement Est.</span>
+                            <span class="value highlight">14.0%</span>
+                        </div>
+                        <div>
+                            <span class="label">Financement</span>
+                            <span class="value">85%</span>
+                        </div>
+                    </div>
+
+                    <button class="btn-invest">Investir Maintenant</button>
+                </div>
+            </div>
+
+            <!-- Carte Projet 3 -->
+            <div class="project-card">
+                <div class="card-image" style="background-color: #f8514933;"></div>
+                <div class="card-content">
+                    <span class="tag">Anacarde</span>
+                    <h3>Coopérative Innovante Korhogo</h3>
+                    <p class="location">📍 Korhogo, Côte d'Ivoire</p>
+
+                    <div class="sensor-data">
+                        <div class="sensor"><span class="icon">💧</span> 45% Humidité</div>
+                        <div class="sensor"><span class="icon">🌡️</span> 32°C Temp.</div>
+                    </div>
+
+                    <div class="investment-info">
+                        <div>
+                            <span class="label">Rendement Est.</span>
+                            <span class="value highlight">10.8%</span>
+                        </div>
+                        <div>
+                            <span class="label">Financement</span>
+                            <span class="value">30%</span>
+                        </div>
+                    </div>
+
+                    <button class="btn-invest">Investir Maintenant</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Statistiques et Impact -->
+    <section id="statistics" class="statistics-section">
+        <div class="section-header">
+            <h2>Notre <span class="highlight">Impact</span></h2>
+            <p>Des chiffres qui parlent d'eux-mêmes</p>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">🌱</div>
+                <div class="stat-number" data-target="1250">0</div>
+                <div class="stat-label">Hectares Cultivés</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">👨‍🌾</div>
+                <div class="stat-number" data-target="340">0</div>
+                <div class="stat-label">Agriculteurs Soutenus</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-number" data-target="85000000">0</div>
+                <div class="stat-label">FCFA Investis</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">📈</div>
+                <div class="stat-number" data-target="13.5">0</div>
+                <div class="stat-label">% Rendement Moyen</div>
+            </div>
+        </div>
+        
+        <div class="impact-highlights">
+            <div class="impact-item">
+                <span class="impact-icon">🌍</span>
+                <span class="impact-text">Réduction de 45% des émissions CO2</span>
+            </div>
+            <div class="impact-item">
+                <span class="impact-icon">💧</span>
+                <span class="impact-text">Économie de 30% d'eau grâce aux capteurs</span>
+            </div>
+            <div class="impact-item">
+                <span class="impact-icon">🏆</span>
+                <span class="impact-text">Certification Agriculture Durable</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Équipe et Partenaires -->
+    <section id="team" class="team-section">
+        <div class="section-header">
+            <h2>Notre <span class="highlight">Équipe</span></h2>
+            <p>Des experts passionnés au service de l'agriculture</p>
+        </div>
+        
+        <div class="team-grid">
+            <div class="team-member">
+                <div class="member-photo" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                <h3>Koffi Yao</h3>
+                <p class="member-role">CEO & Fondateur</p>
+                <p class="member-desc">Expert en agronomie avec 15 ans d'expérience</p>
+            </div>
+            
+            <div class="team-member">
+                <div class="member-photo" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+                <h3>Amina Touré</h3>
+                <p class="member-role">CTO</p>
+                <p class="member-desc">Spécialiste en IoT et technologies agricoles</p>
+            </div>
+            
+            <div class="team-member">
+                <div class="member-photo" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                <h3>Mohamed Diallo</h3>
+            </div>
+        </div>
+        
+        <div class="partners-section">
+            <h3>Nos <span class="highlight">Partenaires</span></h3>
+            <div class="partners-grid">
+                <div class="partner-card">
+                    <div class="partner-logo">🏛️</div>
+                    <h4>Gouvernement</h4>
+                    <p>Ministère de l'Agriculture ivoirien</p>
+                    <div class="certification-badge">Officiel</div>
+                </div>
+                <div class="partner-card">
+                    <div class="partner-logo">🌾</div>
+                    <h4>UNICEF</h4>
+                    <p>Programme de sécurité alimentaire</p>
+                    <div class="certification-badge">ONU</div>
+                </div>
+                <div class="partner-card">
+                    <div class="partner-logo">🔬</div>
+                    <h4>INRA</h4>
+                    <p>Institut National de Recherche Agronomique</p>
+                    <div class="certification-badge">Recherche</div>
+                </div>
+                <div class="partner-card">
+                    <div class="partner-logo">🏦</div>
+                    <h4>BOA</h4>
+                    <p>Banque pour l'Agriculture et l'Environnement</p>
+                    <div class="certification-badge">Financement</div>
+                </div>
+                <div class="partner-card">
+                    <div class="partner-logo">🌍</div>
+                    <h4>FAO</h4>
+                    <p>Organisation des Nations Unies pour l'Alimentation</p>
+                    <div class="certification-badge">International</div>
+                </div>
+                <div class="partner-card">
+                    <div class="partner-logo">📱</div>
+                    <h4>MTN CI</h4>
+                    <p>Solutions mobiles pour l'agriculture</p>
+                    <div class="certification-badge">Technologie</div>
+                </div>
+            </div>
+            
+            <div class="certifications-showcase">
+                <h4>Nos <span class="highlight">Certifications</span></h4>
+                <div class="cert-grid">
+                    <div class="cert-item">
+                        <div class="cert-icon">�</div>
+                        <div class="cert-info">
+                            <h5>ISO 14001</h5>
+                            <p>Management environnemental</p>
+                        </div>
+                    </div>
+                    <div class="cert-item">
+                        <div class="cert-icon">�</div>
+                        <div class="cert-info">
+                            <h5>Agriculture Biologique</h5>
+                            <p>Certification AB et Ecocert</p>
+                        </div>
+                    </div>
+                    <div class="cert-item">
+                        <div class="cert-icon">🤝</div>
+                        <div class="cert-info">
+                            <h5>Fair Trade</h5>
+                            <p>Commerce équitable certifié</p>
+                        </div>
+                    </div>
+                    <div class="cert-item">
+                        <div class="cert-icon">🔒</div>
+                        <div class="cert-info">
+                            <h5>GDPR Compliant</h5>
+                            <p>Protection des données européennes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Témoignages -->
+    <section id="testimonials" class="testimonials-section">
+        <div class="section-header">
+            <h2>Ils Nous <span class="highlight">Font Confiance</span></h2>
+            <p>Retours d'expérience de nos partenaires</p>
+        </div>
+        
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                <p class="testimonial-text">"Grâce à Agrikura, j'ai pu moderniser mon exploitation et doubler ma production. Les capteurs m'ont fait économiser 40% d'eau."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar" style="background: #4CAF50;">K</div>
+                    <div>
+                        <h4>Kouadio Adama</h4>
+                        <p>Producteur de Cacao</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                <p class="testimonial-text">"Investir dans l'agriculture ivoirienne avec Agrikura est la meilleure décision financière que j'aie prise. Rendement de 15% la première année!"</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar" style="background: #2196F3;">S</div>
+                    <div>
+                        <h4>Sophie Bamba</h4>
+                        <p>Investisseuse</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                <p class="testimonial-text">"La transparence et le suivi en temps réel des projets rendent l'investissement beaucoup plus sûr et rassurant."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar" style="background: #FF9800;">J</div>
+                    <div>
+                        <h4>Jean-Marc Kouassi</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="disclaimer-box">
+            <h4>📋 Informations Importantes</h4>
+            <p>Les investissements agricoles comportent des risques. Pass performance ne garantit pas les résultats futurs. 
+            Nous vous recommandons de diversifier vos investissements et de ne pas investir plus que ce que vous pouvez vous permettre de perdre.</p>
+        </div>
+    </section>
+
+    <!-- Section FAQ -->
+    <section id="faq" class="faq-section">
+        <div class="section-header">
+            <h2>Questions <span class="highlight">Fréquentes</span></h2>
+            <p>Tout ce que vous devez savoir sur Agrikura</p>
+
+            <div class="payment-methods">
+                <label class="payment-option">
+                    <input type="radio" name="payment" value="wave" checked>
+                    <img src="images/wave.svg" alt="Wave" style="width:30px;height:30px;border-radius:6px;">
+                    <span>Wave</span>
+                </label>
+                <label class="payment-option">
+                    <input type="radio" name="payment" value="orange">
+                    <img src="images/orange.svg" alt="Orange Money" style="width:30px;height:30px;border-radius:6px;">
+                    <span>Orange Money</span>
+                </label>
+                <label class="payment-option">
+                    <input type="radio" name="payment" value="mtn">
+                    <img src="images/mtn.svg" alt="MTN MoMo" style="width:30px;height:30px;border-radius:6px;">
+                    <span>MTN MoMo</span>
+                </label>
+                <label class="payment-option">
+                    <input type="radio" name="payment" value="moov">
+                    <img src="images/moov.svg" alt="Moov Money" style="width:30px;height:30px;border-radius:6px;">
+                    <span>Moov Money</span>
+                </label>
+            </div>
+
+            <div class="investment-amount">
+                <label for="amount">Montant à investir (FCFA)</label>
+                <input type="number" id="amount" placeholder="Ex: 50 000" min="5000" step="5000">
+                <small>Minimum d'investissement : 5 000 FCFA</small>
+            </div>
+
+            <button class="btn-primary" id="btn-confirm-invest">Confirmer le Paiement</button>
+        </div>
+    </div>
+
+    <!-- Conteneur pour nos notifications stylées -->
+    <div id="notification-container" class="notification-container"></div>
+
+    <!-- On lie notre fichier JavaScript ici, juste avant la fin du body pour que le HTML charge en premier -->
+    <script src="multilang.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
