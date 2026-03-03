@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Agrikura</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
     <link rel="stylesheet" href="auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
@@ -26,6 +27,33 @@
         </div>
 
         <div class="dashboard-grid">
+            <!-- Portfolio Overview -->
+            <div class="portfolio-overview">
+                <h2>📊 Aperçu <span class="highlight">Portefeuille</span></h2>
+                <div class="portfolio-stats">
+                    <div class="stat-card">
+                        <h3 id="total-invested">--</h3>
+                        <p>Total investi</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="expected-return">--</h3>
+                        <p>Rendement attendu</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="roi-average">--%</h3>
+                        <p>ROI moyen</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="active-investments">--</h3>
+                        <p>Investissements actifs</p>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="portfolio-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- Profile Card -->
             <div class="profile-card">
                 <div class="profile-avatar" id="profile-avatar">?</div>
                 <h3 id="profile-name">Chargement...</h3>
@@ -43,11 +71,40 @@
                         <span>📅 Membre depuis</span>
                         <span id="profile-date">—</span>
                     </div>
+                    <div class="profile-info-item">
+                        <span>🔐 Sécurité</span>
+                        <span id="profile-security">—</span>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <a href="/2fa-setup.html" class="btn-secondary">Gérer 2FA</a>
+                    <button class="btn-logout" id="btn-logout">Déconnexion</button>
                 </div>
             </div>
 
+            <!-- Notifications Panel -->
+            <div class="notifications-panel">
+                <h2>🔔 <span class="highlight">Notifications</span></h2>
+                <div class="notifications-list" id="notifications-list">
+                    <div class="notification-item info">
+                        <div class="notification-icon">💡</div>
+                        <div class="notification-content">
+                            <p><strong>Bienvenue sur Agrikura !</strong></p>
+                            <p>Découvrez nos nouveaux projets agricoles disponibles.</p>
+                            <small>il y a 2 jours</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Investments Panel -->
             <div class="investments-panel">
-                <h2>Mes <span class="highlight">Investissements</span></h2>
+                <h2>💼 Mes <span class="highlight">Investissements</span> Détaillés</h2>
+                <div class="investment-filters">
+                    <button class="filter-btn active" data-filter="all">Tous</button>
+                    <button class="filter-btn" data-filter="actif">Actifs</button>
+                    <button class="filter-btn" data-filter="termine">Terminés</button>
+                </div>
                 <div class="investment-list" id="investment-list">
                     <div class="loading-spinner"><div class="spinner"></div><p>Chargement...</p></div>
                 </div>
@@ -56,8 +113,9 @@
     </main>
 
     <script type="module">
-        import { requireAuth, getProfil, deconnexion } from './auth.js';
-        import { supabase } from './db.js';
+        import { requireAuth, getProfil, deconnexion, is2FAEnabled } from './auth.js';
+        import { calculerPortefeuilleUtilisateur, chargerInvestissementsUtilisateur } from './db.js';
+        import { Chart } from 'chart.js/auto';
 
         (async () => {
             const user = await requireAuth();
@@ -66,6 +124,7 @@
             // Charger le profil
             const profil = await getProfil(user.id);
             const nom = profil?.nom_complet || user.email.split('@')[0];
+            const has2FA = await is2FAEnabled(user.id);
 
             document.getElementById('user-name').textContent = nom;
             document.getElementById('profile-name').textContent = nom;
@@ -74,14 +133,86 @@
             document.getElementById('profile-tel').textContent = profil?.telephone || '—';
             document.getElementById('profile-ville').textContent = profil?.ville || '—';
             document.getElementById('profile-date').textContent = new Date(user.created_at).toLocaleDateString('fr-FR');
+            document.getElementById('profile-security').textContent = has2FA ? '2FA activé ✅' : '2FA désactivé ⚠️';
 
-            // Charger les investissements
-            const { data: investissements } = await supabase
-                .from('investissements')
-                .select('*, projets(titre)')
-                .eq('user_id', user.id)
-                .order('created_at', { ascending: false });
+            // Charger le portefeuille
+            const portefeuille = await calculerPortefeuilleUtilisateur(user.id);
 
+            // Mettre à jour les statistiques
+            document.getElementById('total-invested').textContent = portefeuille.totalInvesti.toLocaleString('fr-FR') + ' FCFA';
+            document.getElementById('expected-return').textContent = '+' + portefeuille.gainEstimeTotal.toLocaleString('fr-FR') + ' FCFA';
+            document.getElementById('roi-average').textContent = portefeuille.roiMoyen.toFixed(1) + '%';
+            document.getElementById('active-investments').textContent = portefeuille.nombreInvestissements;
+
+            // Créer le graphique du portefeuille
+            createPortfolioChart(portefeuille.repartitionParCulture);
+
+            // Charger les investissements détaillés
+            const investissements = await chargerInvestissementsUtilisateur(user.id);
+            displayDetailedInvestments(investissements);
+
+            // Configurer les filtres d'investissements
+            setupInvestmentFilters(investissements);
+
+            // Charger les notifications
+            loadNotifications(user.id);
+
+            // Déconnexion
+            document.getElementById('btn-logout').addEventListener('click', async () => {
+                await deconnexion();
+                window.location.href = '/';
+            });
+        })();
+
+        function createPortfolioChart(repartition) {
+            const ctx = document.getElementById('portfolio-chart').getContext('2d');
+            const labels = Object.keys(repartition);
+            const data = Object.values(repartition);
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: [
+                            '#9945FF',
+                            '#4CAF50',
+                            '#FF9800',
+                            '#2196F3',
+                            '#FF5722',
+                            '#9C27B0'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.parsed;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    return context.label + ': ' + value.toLocaleString('fr-FR') + ' FCFA (' + percentage + '%)';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function displayDetailedInvestments(investissements) {
             const listEl = document.getElementById('investment-list');
 
             if (!investissements || investissements.length === 0) {
@@ -90,25 +221,121 @@
                         <p>Vous n'avez pas encore d'investissement.</p>
                         <p><a href="/marketplace.html">Explorer les projets →</a></p>
                     </div>`;
-            } else {
-                listEl.innerHTML = investissements.map(inv => `
-                    <div class="investment-row">
-                        <div>
-                            <div class="inv-projet">${inv.projets?.titre || 'Projet'}</div>
-                            <div class="inv-date">${new Date(inv.created_at).toLocaleDateString('fr-FR')}</div>
-                        </div>
-                        <div class="inv-montant">${inv.montant.toLocaleString('fr-FR')} FCFA</div>
-                        <span class="inv-statut ${inv.statut}">${inv.statut === 'en_attente' ? '⏳ En attente' : '✅ Confirmé'}</span>
-                    </div>
-                `).join('');
+                return;
             }
 
-            // Déconnexion
-            document.getElementById('btn-logout').addEventListener('click', async () => {
-                await deconnexion();
-                window.location.href = '/';
+            listEl.innerHTML = investissements.map(inv => {
+                const gainEstime = inv.gain_estime || 0;
+                const roiEstime = inv.roi_estime || 0;
+                const niveauRisque = inv.niveau_risque || 'Non évalué';
+
+                let risqueClass = 'risque-inconnu';
+                if (niveauRisque === 'Faible') risqueClass = 'risque-faible';
+                else if (niveauRisque === 'Modéré') risqueClass = 'risque-modere';
+                else if (niveauRisque === 'Élevé' || niveauRisque === 'Très Élevé') risqueClass = 'risque-eleve';
+
+                return `
+                    <div class="investment-card">
+                        <div class="investment-header">
+                            <div class="investment-project">
+                                <h4>${inv.projets?.titre || 'Projet inconnu'}</h4>
+                                <p class="investment-location">📍 ${inv.projets?.localisation || 'Localisation inconnue'}</p>
+                                <p class="investment-culture">🌱 ${inv.projets?.culture || 'Culture inconnue'}</p>
+                            </div>
+                            <div class="investment-amount">
+                                <div class="amount-primary">${inv.montant.toLocaleString('fr-FR')} FCFA</div>
+                                <div class="amount-secondary">Investi le ${new Date(inv.date_investissement).toLocaleDateString('fr-FR')}</div>
+                            </div>
+                        </div>
+                        <div class="investment-details">
+                            <div class="detail-item">
+                                <span class="label">Rendement estimé</span>
+                                <span class="value positive">+${gainEstime.toLocaleString('fr-FR')} FCFA</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">ROI projeté</span>
+                                <span class="value">${roiEstime.toFixed(1)}%</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Risque</span>
+                                <span class="value risque ${risqueClass}">${niveauRisque}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Statut</span>
+                                <span class="value statut-${inv.statut}">${inv.statut === 'confirme' ? '✅ Confirmé' : '⏳ ' + inv.statut}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function setupInvestmentFilters(investissements) {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Retirer la classe active de tous les boutons
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    // Ajouter la classe active au bouton cliqué
+                    btn.classList.add('active');
+
+                    const filter = btn.getAttribute('data-filter');
+
+                    let filteredInvestissements;
+                    if (filter === 'all') {
+                        filteredInvestissements = investissements;
+                    } else if (filter === 'actif') {
+                        filteredInvestissements = investissements.filter(inv => inv.statut === 'confirme');
+                    } else if (filter === 'termine') {
+                        // Pour l'instant, on considère tous comme actifs (à adapter selon logique métier)
+                        filteredInvestissements = [];
+                    }
+
+                    displayDetailedInvestments(filteredInvestissements);
+                });
             });
-        })();
+        }
+
+        async function loadNotifications(userId) {
+            const notificationsList = document.getElementById('notifications-list');
+
+            // Pour l'instant, notifications statiques (à remplacer par système réel)
+            const notifications = [
+                {
+                    type: 'info',
+                    icon: '💡',
+                    title: 'Bienvenue sur Agrikura !',
+                    message: 'Découvrez nos nouveaux projets agricoles disponibles.',
+                    date: 'il y a 2 jours'
+                },
+                {
+                    type: 'success',
+                    icon: '🎉',
+                    title: 'Premier investissement réussi !',
+                    message: 'Félicitations pour votre premier investissement agricole.',
+                    date: 'il y a 1 semaine'
+                },
+                {
+                    type: 'warning',
+                    icon: '⚠️',
+                    title: 'Mettez à jour votre profil',
+                    message: 'Complétez vos informations pour une meilleure expérience.',
+                    date: 'il y a 3 jours'
+                }
+            ];
+
+            notificationsList.innerHTML = notifications.map(notif => `
+                <div class="notification-item ${notif.type}">
+                    <div class="notification-icon">${notif.icon}</div>
+                    <div class="notification-content">
+                        <p><strong>${notif.title}</strong></p>
+                        <p>${notif.message}</p>
+                        <small>${notif.date}</small>
+                    </div>
+                </div>
+            `).join('');
+        }
     </script>
 </body>
 </html>
