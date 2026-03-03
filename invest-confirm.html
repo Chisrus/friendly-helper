@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmer l'Investissement | Agrikura</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="/" class="logo"><img class="logo-img" src="/assets/agrikura-logo.svg" alt="Agrikura"><span class="logo-text">Agrikura</span><span class="dot">.</span></a>
+        <ul class="nav-links">
+            <li><a href="/">Accueil</a></li>
+            <li><a href="/marketplace.html">Marketplace</a></li>
+            <li><a href="#" onclick="deconnexion()" class="btn-connect">Déconnexion</a></li>
+        </ul>
+    </nav>
+
+    <main class="auth-page" style="padding-top: 120px;">
+        <div class="auth-card" style="max-width: 900px;">
+            <div class="auth-header">
+                <h1>Confirmer votre Investissement</h1>
+                <p>Vérifiez les détails avant de finaliser votre investissement</p>
+            </div>
+
+            <div id="investment-summary" class="investment-summary">
+                <!-- Contenu généré dynamiquement -->
+            </div>
+
+            <div id="risk-assessment" class="risk-section">
+                <h3>📊 Analyse de Risque</h3>
+                <div id="risk-content">
+                    <!-- Analyse de risque générée dynamiquement -->
+                </div>
+            </div>
+
+            <div id="roi-projection" class="roi-section">
+                <h3>💰 Projection de Rendement</h3>
+                <div id="roi-content">
+                    <!-- Calculs ROI générés dynamiquement -->
+                </div>
+            </div>
+
+            <div id="payment-details" class="payment-section">
+                <h3>💳 Détails du Paiement</h3>
+                <div id="payment-content">
+                    <!-- Détails paiement générés dynamiquement -->
+                </div>
+            </div>
+
+            <div class="investment-actions">
+                <button type="button" class="btn-secondary" onclick="window.history.back()">
+                    ← Modifier
+                </button>
+                <button type="button" class="btn-primary" id="btn-confirm-final">
+                    Confirmer l'Investissement
+                </button>
+            </div>
+
+            <div id="confirmation-message" class="auth-message"></div>
+        </div>
+    </main>
+
+    <div id="notification-container" class="notification-container"></div>
+
+    <script type="module">
+        import { requireAuth, deconnexion } from './auth.js';
+        import { chargerProjets, enregistrerInvestissementComplet } from './db.js';
+
+        (async () => {
+            const user = await requireAuth();
+            if (!user) return;
+
+            // Récupérer les paramètres d'URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const projetId = urlParams.get('projet');
+            const montant = parseInt(urlParams.get('montant'));
+            const methode = urlParams.get('methode');
+
+            if (!projetId || !montant || !methode) {
+                window.location.href = '/marketplace.html';
+                return;
+            }
+
+            // Charger les projets et trouver le projet sélectionné
+            const projets = await chargerProjets();
+            const projet = projets.find(p => p.id === projetId);
+
+            if (!projet) {
+                montrerNotification('❌ Projet introuvable', 'error');
+                setTimeout(() => window.location.href = '/marketplace.html', 2000);
+                return;
+            }
+
+            // Calculer les projections
+            const dureeMois = projet.duree_estimee || 12; // Durée par défaut 12 mois
+            const rendementAnnuel = projet.rendement_estime / 100;
+            const rendementTotal = montant * rendementAnnuel;
+            const retourTotal = montant + rendementTotal;
+            const rendementMensuel = rendementTotal / dureeMois;
+
+            // Analyse de risque simple
+            const risqueScore = analyserRisqueProjet(projet);
+
+            // Générer le contenu
+            document.getElementById('investment-summary').innerHTML = `
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <h4>${projet.titre}</h4>
+                        <p>📍 ${projet.localisation}</p>
+                        <p>🌱 Culture: ${projet.culture}</p>
+                    </div>
+                    <div class="summary-item">
+                        <h4>Montant Investi</h4>
+                        <p class="amount">${montant.toLocaleString('fr-FR')} FCFA</p>
+                    </div>
+                    <div class="summary-item">
+                        <h4>Mode de Paiement</h4>
+                        <p>${getPaymentMethodName(methode)}</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('risk-content').innerHTML = `
+                <div class="risk-indicator" style="background: ${risqueScore.couleur}20; border-left: 4px solid ${risqueScore.couleur};">
+                    <div class="risk-level">
+                        <span class="risk-icon">${risqueScore.icone}</span>
+                        <span class="risk-text">${risqueScore.niveau} (${risqueScore.score}/100)</span>
+                    </div>
+                    <p class="risk-description">${risqueScore.description}</p>
+                    <div class="risk-factors">
+                        <small>${risqueScore.facteurs.join(' • ')}</small>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('roi-content').innerHTML = `
+                <div class="roi-grid">
+                    <div class="roi-item">
+                        <span class="label">Investissement initial</span>
+                        <span class="value">${montant.toLocaleString('fr-FR')} FCFA</span>
+                    </div>
+                    <div class="roi-item">
+                        <span class="label">Rendement annuel estimé</span>
+                        <span class="value highlight">${projet.rendement_estime}%</span>
+                    </div>
+                    <div class="roi-item">
+                        <span class="label">Gain annuel projeté</span>
+                        <span class="value positive">+${rendementTotal.toLocaleString('fr-FR')} FCFA</span>
+                    </div>
+                    <div class="roi-item">
+                        <span class="label">Retour total estimé</span>
+                        <span class="value positive">${retourTotal.toLocaleString('fr-FR')} FCFA</span>
+                    </div>
+                </div>
+                <div class="roi-note">
+                    <small>⚠️ Les projections sont estimatives et dépendent des conditions météorologiques et du marché.</small>
+                </div>
+            `;
+
+            document.getElementById('payment-content').innerHTML = `
+                <div class="payment-info">
+                    <p><strong>Mode de paiement:</strong> ${getPaymentMethodName(methode)}</p>
+                    <p><strong>Montant:</strong> ${montant.toLocaleString('fr-FR')} FCFA</p>
+                    <p><strong>Frais de transaction:</strong> Inclus dans le montant</p>
+                    <p><strong>Délai de traitement:</strong> 24-48h</p>
+                </div>
+            `;
+
+            // Gestionnaire de confirmation finale
+            document.getElementById('btn-confirm-final').addEventListener('click', async () => {
+                const btn = document.getElementById('btn-confirm-final');
+                const msg = document.getElementById('confirmation-message');
+
+                btn.disabled = true;
+                btn.textContent = 'Traitement en cours...';
+                msg.textContent = '';
+                msg.className = 'auth-message';
+
+                try {
+                    // Simuler le traitement du paiement
+                    msg.textContent = '🔄 Vérification du paiement...';
+                    msg.classList.add('info');
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+
+                    msg.textContent = '💰 Traitement du paiement...';
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+
+                    // Enregistrer l'investissement avec calculs complets
+                    const result = await enregistrerInvestissementComplet(
+                        projetId,
+                        montant,
+                        methode,
+                        user.id
+                    );
+
+                    msg.textContent = '✅ Investissement enregistré avec succès !';
+                    msg.classList.add('success');
+
+                    // Afficher un résumé détaillé
+                    setTimeout(() => {
+                        const details = `
+                            💰 Investissement: ${montant.toLocaleString('fr-FR')} FCFA<br>
+                            📈 ROI estimé: ${(result.projections.roi).toFixed(1)}%<br>
+                            🎯 Gain projeté: +${result.projections.gainAnnuel.toLocaleString('fr-FR')} FCFA<br>
+                            📊 Niveau de risque: ${result.projections.analyseRisque.niveau}
+                        `;
+                        montrerNotification(`🎉 <b>Investissement réussi !</b><br>${details}`, "success");
+                        window.location.href = '/dashboard.html';
+                    }, 1000);
+
+                } catch (error) {
+                    msg.textContent = '❌ Erreur lors de l\'investissement: ' + error.message;
+                    msg.classList.add('error');
+                    btn.disabled = false;
+                    btn.textContent = 'Confirmer l\'Investissement';
+                }
+            });
+
+            // Rendre la fonction deconnexion disponible globalement
+            window.deconnexion = deconnexion;
+        })();
+
+        // Fonctions utilitaires
+        function analyserRisqueProjet(projet) {
+            let score = 100;
+            let facteurs = [];
+
+            // Facteurs de risque basés sur les données du projet
+            if (projet.humidite < 40 || projet.humidite > 80) {
+                score -= 20;
+                facteurs.push('Conditions d\'humidité défavorables');
+            }
+
+            if (projet.temperature < 15 || projet.temperature > 35) {
+                score -= 15;
+                facteurs.push('Température non optimale');
+            }
+
+            if (projet.financement_actuel / projet.montant_besoin > 0.8) {
+                score -= 10;
+                facteurs.push('Projet presque entièrement financé');
+            }
+
+            if (projet.rendement_estime > 25) {
+                score -= 5;
+                facteurs.push('Rendement potentiellement trop optimiste');
+            }
+
+            let niveau, couleur, icone, description;
+
+            if (score >= 80) {
+                niveau = 'Faible Risque';
+                couleur = '#2ea043';
+                icone = '🟢';
+                description = 'Conditions favorables pour ce projet agricole.';
+            } else if (score >= 60) {
+                niveau = 'Risque Modéré';
+                couleur = '#d29922';
+                icone = '🟡';
+                description = 'Risque acceptable avec quelques facteurs à surveiller.';
+            } else {
+                niveau = 'Risque Élevé';
+                couleur = '#f85149';
+                icone = '🔴';
+                description = 'Risque significatif. Évaluez soigneusement votre investissement.';
+            }
+
+            return { niveau, couleur, icone, description, facteurs, score };
+        }
+
+        function getPaymentMethodName(methode) {
+            const methods = {
+                'wave': '📱 Wave',
+                'orange': '📲 Orange Money',
+                'mtn': '📞 MTN MoMo',
+                'moov': '💳 Moov Money'
+            };
+            return methods[methode] || methode;
+        }
+
+        function montrerNotification(message, type = 'info') {
+            const container = document.getElementById('notification-container');
+            const notif = document.createElement('div');
+            notif.className = `notification ${type}`;
+            notif.innerHTML = message;
+            container.appendChild(notif);
+            setTimeout(() => notif.classList.add('show'), 10);
+            setTimeout(() => { notif.classList.remove('show'); setTimeout(() => notif.remove(), 300); }, 4000);
+        }
+    </script>
+
+    <style>
+        .investment-summary { margin-bottom: 2rem; }
+        .summary-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+        .summary-item { padding: 1.5rem; background: rgba(0,0,0,0.05); border-radius: 8px; }
+        .summary-item h4 { margin: 0 0 0.5rem 0; color: var(--text-color); }
+        .summary-item p { margin: 0.25rem 0; color: var(--text-secondary); }
+        .amount { font-size: 1.5rem; font-weight: 600; color: var(--primary-color); }
+
+        .risk-section, .roi-section, .payment-section { margin: 2rem 0; padding: 1.5rem; background: rgba(0,0,0,0.03); border-radius: 8px; }
+        .risk-indicator { padding: 1rem; border-radius: 8px; }
+        .risk-level { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+        .risk-description { margin: 0.5rem 0; }
+
+        .roi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+        .roi-item { display: flex; justify-content: space-between; padding: 0.75rem; background: white; border-radius: 6px; }
+        .roi-note { margin-top: 1rem; padding: 1rem; background: rgba(210, 153, 34, 0.1); border-radius: 6px; }
+
+        .investment-actions { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; }
+        .btn-secondary { background: transparent; border: 1px solid var(--glass-border); color: var(--text-color); }
+
+        @media (max-width: 768px) {
+            .summary-grid { grid-template-columns: 1fr; }
+            .roi-grid { grid-template-columns: 1fr; }
+            .investment-actions { flex-direction: column; }
+        }
+    </style>
+</body>
+</html>

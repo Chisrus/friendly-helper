@@ -152,26 +152,14 @@ btnConfirm.addEventListener('click', async () => {
     if (!methode) { montrerNotification("⚠️ Choisissez un mode de paiement.", "info"); return; }
     if (!montant || montant < 5000) { montrerNotification("⚠️ Minimum 5 000 FCFA.", "info"); return; }
 
-    btnConfirm.disabled = true;
-    btnConfirm.textContent = 'Traitement...';
-
-    const { error } = await supabase.from('investissements').insert({
-        projet_id: projetActuelSelectionne.id,
-        montant,
-        methode_paiement: methode,
-        user_id: user.id
+    // Rediriger vers la page de confirmation avec les paramètres
+    const params = new URLSearchParams({
+        projet: projetActuelSelectionne.id,
+        montant: montant,
+        methode: methode
     });
 
-    btnConfirm.disabled = false;
-    btnConfirm.textContent = 'Confirmer le Paiement';
-    modal.classList.remove('active');
-
-    if (!error) {
-        montrerNotification(`✅ <b>Investissement enregistré</b><br>${montant.toLocaleString('fr-FR')} FCFA via ${methode}`, "info");
-        afficherProjets();
-    } else {
-        montrerNotification("❌ Erreur : " + error.message, "info");
-    }
+    window.location.href = `/invest-confirm.html?${params.toString()}`;
 });
 
 // Notifications
