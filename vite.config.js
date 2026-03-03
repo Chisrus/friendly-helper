@@ -3,6 +3,20 @@ import { resolve } from 'path';
 
 export default defineConfig({
   root: '.',
+  server: {
+    open: true,
+    host: true,
+    port: 5173,
+    strictPort: false,
+    // Optimize dev server performance
+    hmr: {
+      overlay: true
+    },
+    // Ensure proper routing for SPA
+    fs: {
+      strict: true
+    }
+  },
   build: {
     outDir: 'dist',
     rollupOptions: {
@@ -19,4 +33,8 @@ export default defineConfig({
       }
     }
   },
+  // Optimize for development performance
+  optimizeDeps: {
+    include: ['@supabase/supabase-js', 'otplib', 'qrcode']
+  }
 });

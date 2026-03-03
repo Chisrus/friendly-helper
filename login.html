@@ -37,6 +37,12 @@
                     <input type="password" id="password" placeholder="••••••••" required minlength="6">
                 </div>
 
+                <div class="form-group" id="twofa-group" style="display: none;">
+                    <label for="twofa-code">Code d'authentification à deux facteurs</label>
+                    <input type="text" id="twofa-code" placeholder="123456" pattern="[0-9]{6}" maxlength="6">
+                    <small style="color: var(--text-secondary); font-size: 0.85rem;">Entrez le code de 6 chiffres de votre application d'authentification</small>
+                </div>
+
                 <button type="submit" class="btn-primary auth-btn" id="btn-login">
                     Se Connecter
                 </button>
@@ -51,7 +57,7 @@
     </main>
 
     <script type="module">
-        import { connexion, getUser } from './auth.js';
+        import { connexionAvec2FA, getUser, logConnexionAttempt } from './auth.js';
 
         (async () => {
             // Si déjà connecté, rediriger
@@ -64,6 +70,10 @@
             const form = document.getElementById('login-form');
             const msg = document.getElementById('auth-message');
             const btn = document.getElementById('btn-login');
+            const twofaGroup = document.getElementById('twofa-group');
+            const twofaInput = document.getElementById('twofa-code');
+
+            let is2FARequired = false;
 
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -72,20 +82,56 @@
                 msg.textContent = '';
                 msg.className = 'auth-message';
 
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const twofaCode = is2FARequired ? twofaInput.value : null;
+
                 try {
-                    await connexion(
-                        document.getElementById('email').value,
-                        document.getElementById('password').value
-                    );
+                    await connexionAvec2FA(email, password, twofaCode);
+
+                    // Log successful login
+                    await logConnexionAttempt(email, true);
+
                     msg.textContent = '✅ Connexion réussie ! Redirection...';
                     msg.classList.add('success');
+
                     const redirect = new URLSearchParams(window.location.search).get('redirect') || '/dashboard.html';
                     setTimeout(() => window.location.href = redirect, 1000);
+
                 } catch (err) {
-                    msg.textContent = '❌ ' + (err.message === 'Invalid login credentials' ? 'Email ou mot de passe incorrect.' : err.message);
-                    msg.classList.add('error');
-                    btn.disabled = false;
-                    btn.textContent = 'Se Connecter';
+                    // Log failed login attempt
+                    await logConnexionAttempt(email, false);
+
+                    if (err.message === '2FA_REQUIRED') {
+                        // Show 2FA input
+                        is2FARequired = true;
+                        twofaGroup.style.display = 'block';
+                        twofaInput.required = true;
+                        twofaInput.focus();
+                        msg.textContent = '🔐 Code 2FA requis. Vérifiez votre application d\'authentification.';
+                        msg.classList.add('info');
+                        btn.disabled = false;
+                        btn.textContent = 'Vérifier le Code 2FA';
+                    } else {
+                        const errorMsg = err.message === 'Invalid login credentials'
+                            ? 'Email ou mot de passe incorrect.'
+                            : err.message === 'Code 2FA invalide'
+                            ? 'Code 2FA incorrect. Réessayez.'
+                            : err.message;
+
+                        msg.textContent = '❌ ' + errorMsg;
+                        msg.classList.add('error');
+                        btn.disabled = false;
+                        btn.textContent = 'Se Connecter';
+
+                        // Reset 2FA if error
+                        if (is2FARequired) {
+                            is2FARequired = false;
+                            twofaGroup.style.display = 'none';
+                            twofaInput.required = false;
+                            twofaInput.value = '';
+                        }
+                    }
                 }
             });
         })();
