@@ -1,0 +1,153 @@
+/* Marketplace Performance Optimizations */
+
+/* ==== ANIMATIONS OPTIMISÉES ==== */
+.project-card {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUpFast 0.4s ease forwards;
+    /* Use transform and opacity for better performance */
+    will-change: transform, opacity;
+}
+
+.project-card:nth-child(1) { animation-delay: 0.05s; }
+.project-card:nth-child(2) { animation-delay: 0.1s; }
+.project-card:nth-child(3) { animation-delay: 0.15s; }
+.project-card:nth-child(4) { animation-delay: 0.2s; }
+.project-card:nth-child(5) { animation-delay: 0.25s; }
+.project-card:nth-child(6) { animation-delay: 0.3s; }
+.project-card:nth-child(7) { animation-delay: 0.35s; }
+.project-card:nth-child(8) { animation-delay: 0.4s; }
+
+@keyframes fadeInUpFast {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Reduce motion for better performance */
+@media (prefers-reduced-motion: reduce) {
+    .project-card {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* Optimize card hover effects */
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Lazy loading placeholder */
+.project-card.loading {
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+}
+
+.project-card.loading .card-content {
+    display: none;
+}
+
+.project-card.loading::before {
+    content: '';
+    display: block;
+    height: 200px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.1) 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 15px 15px 0 0;
+}
+
+@keyframes loading {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Optimize grid layout */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    /* Use contain layout for better performance */
+    contain: layout style;
+}
+
+/* Faster modal animations */
+.modal-overlay {
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.modal-content {
+    transition: transform 0.2s ease;
+}
+
+/* Optimize button hover states */
+.btn-invest {
+    transition: all 0.2s ease;
+    will-change: transform, box-shadow;
+}
+
+.btn-invest:hover {
+    box-shadow: 0 0 25px rgba(153, 69, 255, 0.5), 0 0 40px rgba(20, 241, 149, 0.3);
+    transform: translateY(-3px);
+}
+
+/* Loading state optimizations */
+.loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 4rem 0;
+}
+
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(76, 175, 80, 0.2);
+    border-top-color: var(--accent-color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    /* Use transform for better performance */
+    transform-origin: center;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Optimize sensor data animations */
+.sensor-data {
+    transition: opacity 0.2s ease;
+}
+
+/* Better mobile performance */
+@media (max-width: 768px) {
+    .project-card {
+        /* Reduce animation complexity on mobile */
+        animation-duration: 0.3s;
+    }
+
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+/* Virtual scrolling optimization (for future implementation) */
+.virtual-scroll-container {
+    height: 100vh;
+    overflow-y: auto;
+    contain: strict;
+}
+
+.virtual-scroll-item {
+    /* Items will be positioned absolutely for virtual scrolling */
+    position: absolute;
+    left: 0;
+    right: 0;
+}
