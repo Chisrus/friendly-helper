@@ -229,3 +229,157 @@ export async function calculerPortefeuilleUtilisateur(userId) {
         investissements
     };
 }
+
+// ===== FONCTIONS KYC =====
+
+/**
+ * Soumet une demande KYC pour un utilisateur
+ * @param {Object} kycData - Données KYC
+ * @returns {Promise<Object>} Résultat de la soumission
+ */
+export async function soumettreKYC(kycData) {
+    try {
+        const { data, error } = await supabase
+            .from('kyc_requests')
+            .insert({
+                user_id: kycData.user_id,
+                nom_complet: kycData.nom_complet,
+                date_naissance: kycData.date_naissance,
+                nationalite: kycData.nationalite,
+                numero_telephone: kycData.numero_telephone,
+                adresse: kycData.adresse,
+                documents: kycData.documents,
+                statut: 'pending',
+                consent_kyc: kycData.consent_kyc,
+                consent_fatca: kycData.consent_fatca,
+                date_soumission: new Date().toISOString()
+            });
+
+        if (error) throw error;
+
+        // Log de sécurité
+        await logSecurityEvent(kycData.user_id, 'kyc_submitted', 'KYC request submitted');
+
+        return { success: true, message: 'Demande KYC soumise avec succès' };
+    } catch (error) {
+        console.error('Erreur soumission KYC:', error);
+        throw new Error('Erreur lors de la soumission de la demande KYC');
+    }
+}
+
+/**
+ * Récupère le statut KYC d'un utilisateur
+ * @param {string} userId - ID de l'utilisateur
+ * @returns {Promise<Object|null>} Statut KYC ou null si non soumis
+ */
+export async function getStatutKYC(userId) {
+    try {
+        const { data, error } = await supabase
+            .from('kyc_requests')
+            .select('*')
+            .eq('user_id', userId)
+            .order('date_soumission', { ascending: false })
+            .limit(1)
+            .single();
+
+        if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
+            throw error;
+        }
+
+        return data;
+    } catch (error) {
+        console.error('Erreur récupération statut KYC:', error);
+        return null;
+    }
+}
+
+/**
+ * Met à jour le statut KYC (pour les administrateurs)
+ * @param {string} kycId - ID de la demande KYC
+ * @param {string} statut - Nouveau statut ('approved', 'rejected', 'pending')
+ * @param {string} commentaire - Commentaire optionnel
+ * @returns {Promise<Object>} Résultat de la mise à jour
+ */
+export async function updateStatutKYC(kycId, statut, commentaire = '') {
+    try {
+        const { data, error } = await supabase
+            .from('kyc_requests')
+            .update({
+                statut: statut,
+                commentaire: commentaire,
+                date_validation: new Date().toISOString()
+            })
+            .eq('id', kycId);
+
+        if (error) throw error;
+
+        // Log de sécurité
+        const kycRequest = data[0];
+        if (kycRequest) {
+            await logSecurityEvent(kycRequest.user_id, 'kyc_status_updated', `KYC status updated to ${statut}`);
+        }
+
+        return { success: true, message: `Statut KYC mis à jour: ${statut}` };
+    } catch (error) {
+        console.error('Erreur mise à jour statut KYC:', error);
+        throw new Error('Erreur lors de la mise à jour du statut KYC');
+    }
+}
+
+/**
+ * Récupère toutes les demandes KYC (pour les administrateurs)
+ * @param {string} statut - Filtre optionnel par statut
+ * @returns {Promise<Array>} Liste des demandes KYC
+ */
+export async function getAllKYCDemandes(statut = null) {
+    try {
+        let query = supabase
+            .from('kyc_requests')
+            .select(`
+                *,
+                profiles:user_id (
+                    email,
+                    nom_complet
+                )
+            `)
+            .order('date_soumission', { ascending: false });
+
+        if (statut) {
+            query = query.eq('statut', statut);
+        }
+
+        const { data, error } = await query;
+
+        if (error) throw error;
+
+        return data || [];
+    } catch (error) {
+        console.error('Erreur récupération demandes KYC:', error);
+        return [];
+    }
+}
+
+/**
+ * Log un événement de sécurité
+ * @param {string} userId - ID de l'utilisateur
+ * @param {string} action - Action effectuée
+ * @param {string} details - Détails de l'action
+ * @returns {Promise<void>}
+ */
+export async function logSecurityEvent(userId, action, details = '') {
+    try {
+        await supabase
+            .from('security_logs')
+            .insert({
+                user_id: userId,
+                action: action,
+                details: details,
+                ip_address: 'client-side', // Would be server-side in production
+                user_agent: navigator.userAgent,
+                timestamp: new Date().toISOString()
+            });
+    } catch (error) {
+        console.error('Erreur logging sécurité:', error);
+        // Don't throw here to avoid breaking the main flow
+    }
+}

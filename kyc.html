@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KYC - Agrikura</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+    <link rel="stylesheet" href="accessibility.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="/" class="logo"><img class="logo-img" src="/assets/agrikura-logo.svg" alt="Agrikura"><span class="logo-text">Agrikura</span><span class="dot">.</span></a>
+        <button class="mobile-menu-toggle" id="mobile-menu-btn" aria-label="Menu">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="/">Accueil</a></li>
+            <li><a href="/marketplace.html">Marketplace</a></li>
+            <li><a href="/dashboard.html">Dashboard</a></li>
+            <li><a href="/login.html" class="btn-connect">Espace Investisseur</a></li>
+        </ul>
+    </nav>
+
+    <!-- KYC Section -->
+    <main class="auth-page" id="main-content">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>🆔 Vérification d'Identité (KYC)</h1>
+                <p>Pour investir sur Agrikura, nous devons vérifier votre identité selon les réglementations en vigueur.</p>
+            </div>
+
+            <div id="kyc-status" class="kyc-status">
+                <!-- Status will be loaded here -->
+            </div>
+
+            <form id="kyc-form" class="kyc-form">
+                <div class="form-section">
+                    <h3>📋 Informations Personnelles</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nom_complet">Nom complet *</label>
+                            <input type="text" id="nom_complet" name="nom_complet" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="date_naissance">Date de naissance *</label>
+                            <input type="date" id="date_naissance" name="date_naissance" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nationalite">Nationalité *</label>
+                            <select id="nationalite" name="nationalite" required>
+                                <option value="">Sélectionner</option>
+                                <option value="ci">Côte d'Ivoire</option>
+                                <option value="fr">France</option>
+                                <option value="other">Autre</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="numero_telephone">Numéro de téléphone *</label>
+                            <input type="tel" id="numero_telephone" name="numero_telephone" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="adresse">Adresse complète *</label>
+                        <textarea id="adresse" name="adresse" rows="3" required></textarea>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>📄 Documents Requis</h3>
+
+                    <div class="document-upload">
+                        <div class="document-item">
+                            <h4>Carte d'identité ou Passeport</h4>
+                            <p>Recto et verso de votre pièce d'identité</p>
+                            <div class="upload-area" data-document="id_card">
+                                <input type="file" id="id_card" name="id_card" accept="image/*,.pdf" multiple required>
+                                <div class="upload-placeholder">
+                                    <div class="upload-icon">📷</div>
+                                    <p>Cliquez pour sélectionner les fichiers</p>
+                                    <small>Formats acceptés: JPG, PNG, PDF (Max 10MB)</small>
+                                </div>
+                                <div class="file-list" id="id_card_files"></div>
+                            </div>
+                        </div>
+
+                        <div class="document-item">
+                            <h4>Justificatif de domicile</h4>
+                            <p>Facture d'électricité, eau ou téléphone (moins de 3 mois)</p>
+                            <div class="upload-area" data-document="proof_address">
+                                <input type="file" id="proof_address" name="proof_address" accept="image/*,.pdf" required>
+                                <div class="upload-placeholder">
+                                    <div class="upload-icon">🏠</div>
+                                    <p>Cliquez pour sélectionner le fichier</p>
+                                    <small>Formats acceptés: JPG, PNG, PDF (Max 10MB)</small>
+                                </div>
+                                <div class="file-list" id="proof_address_files"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>🔒 Consentements</h3>
+
+                    <div class="consent-item">
+                        <input type="checkbox" id="consent_kyc" name="consent_kyc" required>
+                        <label for="consent_kyc">
+                            J'accepte que mes données personnelles soient traitées dans le cadre de la vérification d'identité (KYC) conformément à notre <a href="/politique-confidentialite.html" target="_blank">politique de confidentialité</a>.
+                        </label>
+                    </div>
+
+                    <div class="consent-item">
+                        <input type="checkbox" id="consent_fatca" name="consent_fatca" required>
+                        <label for="consent_fatca">
+                            Je confirme ne pas être un contribuable américain soumis à la loi FATCA.
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary" id="submit-kyc">
+                        <span class="btn-text">Soumettre ma demande KYC</span>
+                        <div class="loading-spinner" id="kyc-spinner" style="display: none;">
+                            <div class="spinner"></div>
+                        </div>
+                    </button>
+                    <a href="/dashboard.html" class="btn-secondary">Retour au Dashboard</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <div id="notification-container" class="notification-container"></div>
+
+    <script type="module">
+        import { requireAuth, getProfil } from './auth.js';
+        import { soumettreKYC, getStatutKYC } from './db.js';
+
+        // Mobile menu
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const navLinks = document.getElementById('nav-links');
+        if (mobileBtn) {
+            mobileBtn.addEventListener('click', () => {
+                mobileBtn.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileBtn.classList.remove('active');
+                    navLinks.classList.remove('active');
+                });
+            });
+        }
+
+        // File upload handling
+        document.querySelectorAll('.upload-area input[type="file"]').forEach(input => {
+            const uploadArea = input.closest('.upload-area');
+            const fileList = uploadArea.querySelector('.file-list');
+            const placeholder = uploadArea.querySelector('.upload-placeholder');
+
+            input.addEventListener('change', (e) => {
+                const files = Array.from(e.target.files);
+                fileList.innerHTML = '';
+
+                files.forEach((file, index) => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    fileItem.innerHTML = `
+                        <span class="file-name">${file.name}</span>
+                        <span class="file-size">(${formatFileSize(file.size)})</span>
+                        <button type="button" class="remove-file" data-index="${index}">×</button>
+                    `;
+                    fileList.appendChild(fileItem);
+                });
+
+                placeholder.style.display = files.length > 0 ? 'none' : 'flex';
+            });
+
+            // Remove file functionality
+            fileList.addEventListener('click', (e) => {
+                if (e.target.classList.contains('remove-file')) {
+                    const index = parseInt(e.target.dataset.index);
+                    const dt = new DataTransfer();
+                    const files = Array.from(input.files);
+
+                    files.forEach((file, i) => {
+                        if (i !== index) dt.items.add(file);
+                    });
+
+                    input.files = dt.files;
+                    input.dispatchEvent(new Event('change'));
+                }
+            });
+        });
+
+        // Form submission
+        document.getElementById('kyc-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submit-kyc');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const spinner = document.getElementById('kyc-spinner');
+
+            try {
+                submitBtn.disabled = true;
+                btnText.textContent = 'Soumission en cours...';
+                spinner.style.display = 'block';
+
+                const user = await requireAuth();
+                const formData = new FormData(e.target);
+
+                // Convert files to base64 for storage
+                const documents = {};
+                for (let [key, value] of formData.entries()) {
+                    if (value instanceof File) {
+                        documents[key] = await fileToBase64(value);
+                    }
+                }
+
+                const kycData = {
+                    user_id: user.id,
+                    nom_complet: formData.get('nom_complet'),
+                    date_naissance: formData.get('date_naissance'),
+                    nationalite: formData.get('nationalite'),
+                    numero_telephone: formData.get('numero_telephone'),
+                    adresse: formData.get('adresse'),
+                    documents: documents,
+                    consent_kyc: formData.get('consent_kyc') === 'on',
+                    consent_fatca: formData.get('consent_fatca') === 'on'
+                };
+
+                await soumettreKYC(kycData);
+
+                showNotification('Demande KYC soumise avec succès ! Vous recevrez une confirmation par email.', 'success');
+                setTimeout(() => window.location.href = '/dashboard.html', 3000);
+
+            } catch (error) {
+                console.error('Erreur KYC:', error);
+                showNotification('Erreur lors de la soumission: ' + error.message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                btnText.textContent = 'Soumettre ma demande KYC';
+                spinner.style.display = 'none';
+            }
+        });
+
+        // Load KYC status
+        async function loadKYCStatus() {
+            try {
+                const user = await requireAuth();
+                const status = await getStatutKYC(user.id);
+                displayKYCStatus(status);
+            } catch (error) {
+                console.error('Erreur chargement statut KYC:', error);
+            }
+        }
+
+        function displayKYCStatus(status) {
+            const statusDiv = document.getElementById('kyc-status');
+            const form = document.getElementById('kyc-form');
+
+            if (!status) {
+                statusDiv.innerHTML = `
+                    <div class="status-card status-pending">
+                        <h3>📝 Statut KYC: Non soumis</h3>
+                        <p>Veuillez compléter le formulaire ci-dessous pour vérifier votre identité.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let statusClass, statusIcon, statusText, statusDesc;
+
+            switch (status.statut) {
+                case 'pending':
+                    statusClass = 'status-pending';
+                    statusIcon = '⏳';
+                    statusText = 'En cours de vérification';
+                    statusDesc = 'Votre demande est en cours d\'examen. Vous serez notifié par email.';
+                    form.style.display = 'none';
+                    break;
+                case 'approved':
+                    statusClass = 'status-approved';
+                    statusIcon = '✅';
+                    statusText = 'Approuvé';
+                    statusDesc = 'Votre identité a été vérifiée. Vous pouvez maintenant investir.';
+                    form.style.display = 'none';
+                    break;
+                case 'rejected':
+                    statusClass = 'status-rejected';
+                    statusIcon = '❌';
+                    statusText = 'Refusé';
+                    statusDesc = `Votre demande a été refusée: ${status.commentaire || 'Raison non spécifiée'}. Veuillez corriger et soumettre à nouveau.`;
+                    break;
+                default:
+                    statusClass = 'status-pending';
+                    statusIcon = '📝';
+                    statusText = 'Non soumis';
+                    statusDesc = 'Veuillez compléter le formulaire ci-dessous.';
+            }
+
+            statusDiv.innerHTML = `
+                <div class="status-card ${statusClass}">
+                    <h3>${statusIcon} Statut KYC: ${statusText}</h3>
+                    <p>${statusDesc}</p>
+                    ${status.date_soumission ? `<small>Dernière mise à jour: ${new Date(status.date_soumission).toLocaleDateString('fr-FR')}</small>` : ''}
+                </div>
+            `;
+        }
+
+        // Utility functions
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notification-container');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <p>${message}</p>
+                </div>
+                <button class="close-notification" onclick="this.parentElement.remove()">×</button>
+            `;
+            container.appendChild(notification);
+
+            setTimeout(() => {
+                notification.classList.add('show');
+                setTimeout(() => notification.remove(), 5000);
+            }, 100);
+        }
+
+        // Initialize
+        loadKYCStatus();
+    </script>
+</body>
+</html>
