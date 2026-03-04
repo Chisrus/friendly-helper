@@ -1,16 +1,69 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="Agrikura logo">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#2E7D32"/>
-      <stop offset="1" stop-color="#4CAF50"/>
-    </linearGradient>
-  </defs>
-  <rect width="128" height="128" fill="none"/>
-  <path d="M18 78 L48 48 L66 66 L96 36 L110 50 L68 92 L48 72 L30 90 Z" fill="url(#g)"/>
-  <path d="M70 30 C82 36 92 48 96 62 C84 58 74 46 70 30 Z" fill="#4CAF50"/>
-  <path d="M66 36 C76 42 84 52 88 66 C78 62 70 52 66 36 Z" fill="#3E8E41"/>
-  <path d="M62 42 C70 48 76 58 80 70 C72 66 66 56 62 42 Z" fill="#2E7D32"/>
-  <path d="M58 50 C64 56 68 64 70 74 C64 70 60 62 58 50 Z" fill="#2E7D32" opacity="0.9"/>
-  <path d="M54 58 C58 62 60 68 60 74 C56 72 54 66 54 58 Z" fill="#2E7D32" opacity="0.85"/>
-  <path d="M64 80 C72 72 80 64 88 56" fill="none" stroke="#1B5E20" stroke-width="6" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="Agrikura logo">
+  <!-- Background: transparent -->
+
+  <!-- Trending-up zigzag arrow (dark green) -->
+  <!-- Arrow body: goes left-down then up-right with a zigzag -->
+  <polyline
+    points="60,190 110,140 150,170 220,100"
+    fill="none"
+    stroke="#1a5c2a"
+    stroke-width="18"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <!-- Arrow head pointing upper-right -->
+  <polygon
+    points="220,100 195,108 212,125"
+    fill="#1a5c2a"
+  />
+  <!-- Better arrowhead using path -->
+  <path
+    d="M205,88 L240,95 L230,130 Z"
+    fill="#1a5c2a"
+  />
+
+  <!-- Wheat/grain stalk growing from arrow tip -->
+  <!-- Main stem -->
+  <line x1="228" y1="130" x2="228" y2="60" stroke="#2d8a3e" stroke-width="3" stroke-linecap="round"/>
+  <!-- Wheat grains (leaf-like shapes on alternating sides) -->
+  <!-- Left grain 1 -->
+  <ellipse cx="218" cy="115" rx="10" ry="5" fill="#3aaa50" transform="rotate(-40 218 115)"/>
+  <!-- Right grain 1 -->
+  <ellipse cx="238" cy="105" rx="10" ry="5" fill="#3aaa50" transform="rotate(40 238 105)"/>
+  <!-- Left grain 2 -->
+  <ellipse cx="216" cy="97" rx="9" ry="4.5" fill="#3aaa50" transform="rotate(-40 216 97)"/>
+  <!-- Right grain 2 -->
+  <ellipse cx="240" cy="88" rx="9" ry="4.5" fill="#3aaa50" transform="rotate(40 240 88)"/>
+  <!-- Left grain 3 -->
+  <ellipse cx="218" cy="80" rx="8" ry="4" fill="#3aaa50" transform="rotate(-40 218 80)"/>
+  <!-- Right grain 3 -->
+  <ellipse cx="238" cy="72" rx="8" ry="4" fill="#3aaa50" transform="rotate(40 238 72)"/>
+  <!-- Top tip grain -->
+  <ellipse cx="228" cy="60" rx="6" ry="3" fill="#3aaa50" transform="rotate(0 228 60)"/>
+  <!-- Small leaf at base of stalk -->
+  <path d="M228,125 C215,118 210,108 218,100" fill="none" stroke="#2d8a3e" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- AGRIKURA text -->
+  <text
+    x="200"
+    y="230"
+    font-family="Arial Black, Arial, sans-serif"
+    font-weight="900"
+    font-size="52"
+    fill="#1a5c2a"
+    text-anchor="middle"
+    letter-spacing="3"
+  >AGRIKURA</text>
+
+  <!-- Tagline -->
+  <text
+    x="200"
+    y="265"
+    font-family="Arial, sans-serif"
+    font-weight="400"
+    font-size="18"
+    fill="#2d8a3e"
+    text-anchor="middle"
+    letter-spacing="1"
+  >Invest in the Earth.</text>
 </svg>
