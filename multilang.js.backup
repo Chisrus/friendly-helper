@@ -94,12 +94,12 @@ const translations = {
         'funding': 'Funding',
         
         // Statistics
-        'our_impact': 'Our <span class="highlight">Impact</span>',
-        'impact_subtitle': 'Numbers that speak for themselves',
-        'hectares_cultivated': 'Hectares Cultivated',
-        'farmers_supported': 'Farmers Supported',
-        'fcfa_invested': 'FCFA Invested',
-        'avg_return': 'Avg. Return %',
+        'our_impact': 'Our Impact Goals',
+        'impact_subtitle': 'Our ambitions for the coming years',
+        'hectares_cultivated': 'Hectares Cultivated (Goal)',
+        'farmers_supported': 'Farmers Supported (Goal)',
+        'fcfa_invested': 'FCFA Invested (Goal)',
+        'avg_return': '% Average Return (Target)',
         
         // Team
         'our_team': 'Our <span class="highlight">Team</span>',
@@ -120,11 +120,24 @@ const translations = {
         'avg_performance': 'Average Return',
         'delivered_projects': 'Delivered Projects',
         'important_info': 'Important Information',
-        'disclaimer': 'Agricultural investments involve risks. Past performance does not guarantee future results. We recommend diversifying your investments and not investing more than you can afford to lose.'
+        'disclaimer': 'Agricultural investments involve risks. Past performance does not guarantee future results. We recommend diversifying your investments and not investing more than you can afford to lose.',
+
+        // Insurance
+        'insure_your_field': 'Insure your <span class="highlight">Field</span>',
+        'insurance_subtitle': 'Protect your agricultural investments against climatic risks and other hazards',
+        'climatic_risks': 'Climatic Risks',
+        'climatic_risks_desc': 'Coverage against extreme weather conditions such as droughts, floods and other meteorological phenomena that can affect your crops.',
+        'diseases_pests': 'Diseases & Pests',
+        'diseases_pests_desc': 'Protection against epidemics of plant diseases and pest infestations that threaten your crops.',
+        'price_fluctuations': 'Price Fluctuations',
+        'price_fluctuations_desc': 'Guarantee against sudden drops in market prices that can reduce your income.',
+        'get_custom_quote': 'Get a Custom Quote',
+        'quote_desc': 'Contact our team for coverage adapted to your agricultural needs.',
+        'request_quote': 'Request a Quote'
     }
 };
 
-let currentLang = 'fr';
+let currentLang = 'en';
 
 function switchLanguage(lang) {
     currentLang = lang;
@@ -147,6 +160,12 @@ function switchLanguage(lang) {
     
     // Update section headers
     updateSectionHeaders(lang);
+
+    // Update concept steps
+    updateConceptSteps(lang);
+
+    // Update CTA
+    updateCta(lang);
     
     // Update investment buttons
     document.querySelectorAll('.btn-invest').forEach(btn => {
@@ -185,11 +204,12 @@ function updateSectionHeaders(lang) {
         '#statistics .section-header p': translations[lang].impact_subtitle,
         '#team h2': translations[lang].our_team,
         '#team .section-header p': translations[lang].team_subtitle,
-        '#team h3': translations[lang].our_partners,
         '#testimonials h2': translations[lang].they_trust_us,
         '#testimonials .section-header p': translations[lang].testimonials_subtitle,
         '#risk-guarantees h2': translations[lang].transparency_security,
-        '#risk-guarantees .section-header p': translations[lang].risk_subtitle
+        '#risk-guarantees .section-header p': translations[lang].risk_subtitle,
+        '#insurance h2': translations[lang].insure_your_field,
+        '#insurance .section-header p': translations[lang].insurance_subtitle
     };
     
     Object.entries(headers).forEach(([selector, text]) => {
@@ -202,6 +222,43 @@ function updateSectionHeaders(lang) {
             }
         }
     });
+}
+
+function updateConceptSteps(lang) {
+    const step1Title = document.querySelector('#concept .concept-steps .step:nth-child(1) h3');
+    const step1Desc = document.querySelector('#concept .concept-steps .step:nth-child(1) p');
+    const step2Title = document.querySelector('#concept .concept-steps .step:nth-child(2) h3');
+    const step2Desc = document.querySelector('#concept .concept-steps .step:nth-child(2) p');
+    const step3Title = document.querySelector('#concept .concept-steps .step:nth-child(3) h3');
+    const step3Desc = document.querySelector('#concept .concept-steps .step:nth-child(3) p');
+
+    if (step1Title) step1Title.textContent = translations[lang].step1_title;
+    if (step1Desc) step1Desc.textContent = translations[lang].step1_desc;
+    if (step2Title) step2Title.textContent = translations[lang].step2_title;
+    if (step2Desc) step2Desc.textContent = translations[lang].step2_desc;
+    if (step3Title) step3Title.textContent = translations[lang].step3_title;
+    if (step3Desc) step3Desc.textContent = translations[lang].step3_desc;
+}
+
+function updateCta(lang) {
+    const ctaTitle = document.querySelector('.cta-section h2');
+    const ctaSubtitle = document.querySelector('.cta-section p');
+    const ctaButtons = document.querySelectorAll('.cta-section .hero-buttons a');
+
+    if (ctaTitle) {
+        ctaTitle.innerHTML = lang === 'en'
+            ? 'Ready to <span class="highlight">Invest</span> ?'
+            : 'Prêt à <span class="highlight">Investir</span> ?';
+    }
+
+    if (ctaSubtitle) {
+        ctaSubtitle.textContent = lang === 'en'
+            ? 'Join 340+ farmers and hundreds of investors on Agrikura.'
+            : "Rejoignez plus de 340 agriculteurs et des centaines d'investisseurs sur Agrikura.";
+    }
+
+    if (ctaButtons[0]) ctaButtons[0].textContent = lang === 'en' ? 'Create a Free Account' : 'Créer un Compte Gratuit';
+    if (ctaButtons[1]) ctaButtons[1].textContent = lang === 'en' ? 'View Projects' : 'Voir les Projets';
 }
 
 function updateStatLabels(lang) {
@@ -225,7 +282,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const languageSelect = document.getElementById('language-select');
     if (languageSelect) {
         // Load saved preference
-        const savedLang = localStorage.getItem('preferredLanguage') || 'fr';
+        const savedLang = localStorage.getItem('preferredLanguage') || 'en';
         languageSelect.value = savedLang;
         switchLanguage(savedLang);
         

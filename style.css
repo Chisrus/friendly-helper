@@ -90,26 +90,45 @@ body {
     font-size: 1.8rem;
     font-weight: 800;
     letter-spacing: 1px;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    text-decoration: none;
-    color: var(--text-color);
-}
-
-.logo-img {
-    width: 34px;
-    height: 34px;
-    object-fit: contain;
-    display: block;
-}
-
-.logo-text {
-    line-height: 1;
 }
 
 .logo .dot {
     color: var(--primary-color);
+}
+
+.navbar .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    text-decoration: none;
+    color: var(--text-color);
+    letter-spacing: 0.5px;
+    line-height: 1;
+}
+
+.navbar .logo .logo-mark {
+    width: 46px;
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.navbar .logo .logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.28);
+    transform-origin: center;
+    display: block;
+}
+
+.navbar .logo .logo-text {
+    font-size: 1.42rem;
+    font-weight: 800;
 }
 
 .nav-links {
@@ -532,6 +551,15 @@ body {
     .section-header h2 {
         font-size: 1.8rem;
     }
+
+    .navbar .logo .logo-mark {
+        width: 40px;
+        height: 40px;
+    }
+
+    .navbar .logo .logo-text {
+        font-size: 1.22rem;
+    }
 }
 
 /* Menu hamburger mobile */
@@ -881,43 +909,6 @@ body {
         grid-template-columns: 1fr;
         gap: 2rem;
     }
-}
-
-/* ==== PAGES LÉGALES ==== */
-.legal-content {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    text-align: justify;
-    line-height: 1.8;
-}
-
-.legal-content h3 {
-    margin-top: 2.5rem;
-    margin-bottom: 1rem;
-    color: var(--text-color);
-    font-size: 1.3rem;
-    font-weight: 600;
-}
-
-.legal-content p {
-    margin-bottom: 1.2rem;
-    color: var(--text-secondary);
-}
-
-.legal-content ul {
-    margin-left: 1.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.legal-content li {
-    margin-bottom: 0.5rem;
-    color: var(--text-secondary);
-}
-
-.legal-content strong {
-    color: var(--text-color);
-    font-weight: 600;
 }
 
 /* ==== ANIMATIONS ENTRÉE ==== */

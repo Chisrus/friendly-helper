@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/assets/agrikura-favicon.svg">
     <title>Inscription | Agrikura</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
-
     <nav class="navbar">
-        <a href="/" class="logo"><img class="logo-img" src="/assets/agrikura-logo.svg" alt="Agrikura"><span class="logo-text">Agrikura</span><span class="dot">.</span></a>
+        <a href="/" class="logo"><span class="logo-mark"><img class="logo-img" src="/assets/agrikura-logo.svg" alt="Agrikura"></span><span class="logo-text">Agrikura</span><span class="dot">.</span></a>
         <ul class="nav-links">
             <li><a href="/">Accueil</a></li>
             <li><a href="/marketplace.html">Marketplace</a></li>
@@ -22,10 +22,9 @@
     <main class="auth-page">
         <div class="auth-card">
             <div class="auth-header">
-                <h1>Créer un Compte</h1>
-                <p>Rejoignez la communauté Agrikura et investissez dans l'agriculture</p>
+                <h1>CrÃ©er un Compte</h1>
+                <p>AccÃ©dez Ã  l'espace d'administration Agrikura</p>
             </div>
-
             <form id="register-form" class="auth-form">
                 <div class="form-row">
                     <div class="form-group">
@@ -33,46 +32,33 @@
                         <input type="text" id="nom" placeholder="Kouadio Yao" required>
                     </div>
                     <div class="form-group">
-                        <label for="telephone">Téléphone</label>
+                        <label for="telephone">TÃ©lÃ©phone</label>
                         <input type="tel" id="telephone" placeholder="+225 07 00 00 00">
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" placeholder="votre@email.com" required>
                 </div>
-
                 <div class="form-group">
                     <label for="ville">Ville</label>
                     <input type="text" id="ville" placeholder="Abidjan">
                 </div>
-
                 <div class="form-row">
                     <div class="form-group">
                         <label for="password">Mot de passe</label>
-                        <input type="password" id="password" placeholder="••••••••" required minlength="6">
+                        <input type="password" id="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required minlength="6">
                     </div>
                     <div class="form-group">
                         <label for="password-confirm">Confirmer</label>
-                        <input type="password" id="password-confirm" placeholder="••••••••" required minlength="6">
+                        <input type="password" id="password-confirm" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required minlength="6">
                     </div>
                 </div>
-
-                <label class="checkbox-group">
-                    <input type="checkbox" id="terms" required>
-                    <span>J'accepte les <a href="/conditions-utilisation.html" style="color: var(--accent-color);">conditions d'utilisation</a> et la <a href="/politique-confidentialite.html" style="color: var(--accent-color);">politique de confidentialité</a></span>
-                </label>
-
-                <button type="submit" class="btn-primary auth-btn" id="btn-register">
-                    Créer mon Compte
-                </button>
-
+                <button type="submit" class="btn-primary auth-btn" id="btn-register">CrÃ©er mon Compte</button>
                 <div id="auth-message" class="auth-message"></div>
             </form>
-
             <div class="auth-footer">
-                <p>Déjà un compte ? <a href="/login.html">Se connecter</a></p>
+                <p>DÃ©jÃ  un compte ? <a href="/login.html">Se connecter</a></p>
             </div>
         </div>
     </main>
@@ -83,46 +69,42 @@
         (async () => {
             const user = await getUser();
             if (user) window.location.href = '/dashboard.html';
-
-            const form = document.getElementById('register-form');
-            const msg = document.getElementById('auth-message');
-            const btn = document.getElementById('btn-register');
-
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const password = document.getElementById('password').value;
-                const confirm = document.getElementById('password-confirm').value;
-
-                if (password !== confirm) {
-                    msg.textContent = '❌ Les mots de passe ne correspondent pas.';
-                    msg.classList.add('error');
-                    return;
-                }
-
-                btn.disabled = true;
-                btn.textContent = 'Création...';
-                msg.textContent = '';
-                msg.className = 'auth-message';
-
-                try {
-                    await inscription(
-                        document.getElementById('email').value,
-                        password,
-                        document.getElementById('nom').value,
-                        document.getElementById('telephone').value,
-                        document.getElementById('ville').value
-                    );
-                    msg.innerHTML = '✅ Compte créé ! Vérifiez votre email pour confirmer votre inscription.';
-                    msg.classList.add('success');
-                    btn.textContent = 'Email envoyé ✉️';
-                } catch (err) {
-                    msg.textContent = '❌ ' + err.message;
-                    msg.classList.add('error');
-                    btn.disabled = false;
-                    btn.textContent = 'Créer mon Compte';
-                }
-            });
         })();
+
+        const form = document.getElementById('register-form');
+        const msg = document.getElementById('auth-message');
+        const btn = document.getElementById('btn-register');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('password-confirm').value;
+            if (password !== confirm) {
+                msg.textContent = 'âŒ Les mots de passe ne correspondent pas.';
+                msg.classList.add('error');
+                return;
+            }
+            btn.disabled = true;
+            btn.textContent = 'CrÃ©ation...';
+            msg.textContent = '';
+            msg.className = 'auth-message';
+            try {
+                await inscription(
+                    document.getElementById('email').value,
+                    password,
+                    document.getElementById('nom').value,
+                    document.getElementById('telephone').value,
+                    document.getElementById('ville').value
+                );
+                msg.innerHTML = 'âœ… Compte crÃ©Ã© ! VÃ©rifiez votre email pour confirmer votre inscription.';
+                msg.classList.add('success');
+                btn.textContent = 'Email envoyÃ© âœ‰ï¸';
+            } catch (err) {
+                msg.textContent = 'âŒ ' + err.message;
+                msg.classList.add('error');
+                btn.disabled = false;
+                btn.textContent = 'CrÃ©er mon Compte';
+            }
+        });
     </script>
 </body>
 </html>

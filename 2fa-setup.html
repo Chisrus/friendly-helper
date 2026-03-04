@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/assets/agrikura-favicon.svg">
     <title>Configuration 2FA | Agrikura</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="auth.css">
@@ -11,31 +12,31 @@
 <body>
 
     <nav class="navbar">
-        <a href="/" class="logo"><img class="logo-img" src="/assets/agrikura-logo.svg" alt="Agrikura"><span class="logo-text">Agrikura</span><span class="dot">.</span></a>
+        <a href="/" class="logo"><span class="logo-mark"><img class="logo-img" src="/assets/agrikura-logo.svg" alt="Agrikura"></span><span class="logo-text">Agrikura</span><span class="dot">.</span></a>
         <ul class="nav-links">
             <li><a href="/">Accueil</a></li>
             <li><a href="/dashboard.html">Dashboard</a></li>
-            <li><a href="#" onclick="deconnexion()" class="btn-connect">Déconnexion</a></li>
+            <li><a href="#" onclick="deconnexion()" class="btn-connect">DÃ©connexion</a></li>
         </ul>
     </nav>
 
     <main class="auth-page" style="padding-top: 120px;">
         <div class="auth-card">
             <div class="auth-header">
-                <h1>Authentification à deux facteurs</h1>
-                <p>Renforcez la sécurité de votre compte</p>
+                <h1>Authentification Ã  deux facteurs</h1>
+                <p>Renforcez la sÃ©curitÃ© de votre compte</p>
             </div>
 
             <div id="setup-section">
                 <div class="form-group">
-                    <h3 style="color: var(--text-color); margin-bottom: 1rem;">Étape 1: Installez une application d'authentification</h3>
+                    <h3 style="color: var(--text-color); margin-bottom: 1rem;">Ã‰tape 1: Installez une application d'authentification</h3>
                     <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                        Téléchargez une application comme Google Authenticator, Authy, ou Microsoft Authenticator sur votre téléphone.
+                        TÃ©lÃ©chargez une application comme Google Authenticator, Authy, ou Microsoft Authenticator sur votre tÃ©lÃ©phone.
                     </p>
                 </div>
 
                 <div class="form-group">
-                    <h3 style="color: var(--text-color); margin-bottom: 1rem;">Étape 2: Scannez le QR code</h3>
+                    <h3 style="color: var(--text-color); margin-bottom: 1rem;">Ã‰tape 2: Scannez le QR code</h3>
                     <div id="qr-container" style="text-align: center; margin: 2rem 0;">
                         <img id="qr-code" src="" alt="QR Code 2FA" style="max-width: 200px; border: 1px solid var(--glass-border); border-radius: 8px; padding: 1rem; background: white;">
                         <p style="color: var(--text-secondary); margin-top: 1rem; font-size: 0.9rem;">
@@ -45,8 +46,8 @@
                 </div>
 
                 <div class="form-group">
-                    <h3 style="color: var(--text-color); margin-bottom: 1rem;">Étape 3: Vérifiez le code</h3>
-                    <label for="verify-code">Code de vérification (6 chiffres)</label>
+                    <h3 style="color: var(--text-color); margin-bottom: 1rem;">Ã‰tape 3: VÃ©rifiez le code</h3>
+                    <label for="verify-code">Code de vÃ©rification (6 chiffres)</label>
                     <input type="text" id="verify-code" placeholder="123456" pattern="[0-9]{6}" maxlength="6" required>
                 </div>
 
@@ -58,10 +59,10 @@
             </div>
 
             <div id="success-section" style="display: none; text-align: center;">
-                <div style="color: #4CAF50; font-size: 3rem; margin-bottom: 1rem;">✅</div>
-                <h3 style="color: var(--text-color); margin-bottom: 1rem;">Authentification 2FA activée !</h3>
+                <div style="color: #4CAF50; font-size: 3rem; margin-bottom: 1rem;">âœ…</div>
+                <h3 style="color: var(--text-color); margin-bottom: 1rem;">Authentification 2FA activÃ©e !</h3>
                 <p style="color: var(--text-secondary); margin-bottom: 2rem;">
-                    Votre compte est maintenant protégé par une authentification à deux facteurs.
+                    Votre compte est maintenant protÃ©gÃ© par une authentification Ã  deux facteurs.
                 </p>
                 <button type="button" class="btn-primary auth-btn" onclick="window.location.href='/dashboard.html'">
                     Retour au Dashboard
@@ -69,7 +70,7 @@
             </div>
 
             <div class="auth-footer">
-                <p><a href="/dashboard.html">← Retour au Dashboard</a></p>
+                <p><a href="/dashboard.html">â† Retour au Dashboard</a></p>
             </div>
         </div>
     </main>
@@ -78,7 +79,7 @@
         import { requireAuth, generate2FAQRCode, generate2FASecret, enable2FA, verify2FAToken, deconnexion } from './auth.js';
 
         (async () => {
-            // Vérifier l'authentification
+            // VÃ©rifier l'authentification
             const user = await requireAuth();
             if (!user) return;
 
@@ -92,9 +93,9 @@
 
             let currentSecret = null;
 
-            // Générer le QR code au chargement
+            // GÃ©nÃ©rer le QR code au chargement
             try {
-                msg.textContent = 'Génération du QR code...';
+                msg.textContent = 'GÃ©nÃ©ration du QR code...';
                 msg.className = 'auth-message info';
 
                 currentSecret = generate2FASecret();
@@ -102,11 +103,11 @@
 
                 qrCode.src = qrCodeDataURL;
                 qrContainer.style.display = 'block';
-                msg.textContent = 'QR code généré. Scannez-le avec votre application.';
+                msg.textContent = 'QR code gÃ©nÃ©rÃ©. Scannez-le avec votre application.';
                 msg.classList.add('success');
 
             } catch (error) {
-                msg.textContent = '❌ Erreur génération QR code: ' + error.message;
+                msg.textContent = 'âŒ Erreur gÃ©nÃ©ration QR code: ' + error.message;
                 msg.classList.add('error');
                 return;
             }
@@ -116,13 +117,13 @@
                 const code = verifyInput.value.trim();
 
                 if (!code || code.length !== 6) {
-                    msg.textContent = '❌ Veuillez entrer un code de 6 chiffres.';
+                    msg.textContent = 'âŒ Veuillez entrer un code de 6 chiffres.';
                     msg.classList.add('error');
                     return;
                 }
 
                 if (!verify2FAToken(currentSecret, code)) {
-                    msg.textContent = '❌ Code incorrect. Vérifiez votre application.';
+                    msg.textContent = 'âŒ Code incorrect. VÃ©rifiez votre application.';
                     msg.classList.add('error');
                     return;
                 }
@@ -135,12 +136,12 @@
 
                     await enable2FA(user.id, currentSecret);
 
-                    // Afficher la section succès
+                    // Afficher la section succÃ¨s
                     setupSection.style.display = 'none';
                     successSection.style.display = 'block';
 
                 } catch (error) {
-                    msg.textContent = '❌ Erreur activation: ' + error.message;
+                    msg.textContent = 'âŒ Erreur activation: ' + error.message;
                     msg.classList.add('error');
                     btnEnable.disabled = false;
                     btnEnable.textContent = 'Activer l\'authentification 2FA';

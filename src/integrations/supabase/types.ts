@@ -41,6 +41,75 @@ export type Database = {
         }
         Relationships: []
       }
+      inscriptions_agriculteurs: {
+        Row: {
+          besoin_financement: number
+          capacite_champs: string
+          contact: string
+          created_at: string
+          email: string | null
+          en_activite: boolean
+          id: string
+          nom: string
+          prenom: string
+          type_culture: string
+        }
+        Insert: {
+          besoin_financement?: number
+          capacite_champs: string
+          contact: string
+          created_at?: string
+          email?: string | null
+          en_activite?: boolean
+          id?: string
+          nom: string
+          prenom: string
+          type_culture: string
+        }
+        Update: {
+          besoin_financement?: number
+          capacite_champs?: string
+          contact?: string
+          created_at?: string
+          email?: string | null
+          en_activite?: boolean
+          id?: string
+          nom?: string
+          prenom?: string
+          type_culture?: string
+        }
+        Relationships: []
+      }
+      inscriptions_investisseurs: {
+        Row: {
+          capacite_financement: number
+          contact: string
+          created_at: string
+          email: string | null
+          id: string
+          nom: string
+          prenom: string
+        }
+        Insert: {
+          capacite_financement?: number
+          contact: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          nom: string
+          prenom: string
+        }
+        Update: {
+          capacite_financement?: number
+          contact?: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          nom?: string
+          prenom?: string
+        }
+        Relationships: []
+      }
       investissements: {
         Row: {
           created_at: string

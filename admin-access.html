@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/assets/agrikura-favicon.svg">
+    <title>Acces Prive | Agrikura</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main class="auth-page">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>Acces Admin Prive</h1>
+                <p>Entrez le code d'acces pour ouvrir l'interface d'administration.</p>
+            </div>
+
+            <form id="admin-access-form" class="auth-form">
+                <div class="form-group">
+                    <label for="admin-code">Code secret</label>
+                    <input type="password" id="admin-code" placeholder="Code admin" required>
+                </div>
+                <button type="submit" class="btn-primary auth-btn" id="btn-admin-access">Acceder</button>
+                <div id="admin-access-message" class="auth-message"></div>
+            </form>
+        </div>
+    </main>
+
+    <script type="module">
+        const ACCESS_CODE = (import.meta.env.VITE_ADMIN_ACCESS_CODE || 'AGK-ADMIN-2026').trim();
+        const STORAGE_KEY = 'agrikura_admin_gate';
+
+        const form = document.getElementById('admin-access-form');
+        const msg = document.getElementById('admin-access-message');
+        const btn = document.getElementById('btn-admin-access');
+
+        if (sessionStorage.getItem(STORAGE_KEY) === 'open') {
+            window.location.href = '/login.html?redirect=%2Fdashboard.html';
+        }
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            btn.disabled = true;
+            msg.textContent = '';
+            msg.className = 'auth-message';
+
+            const code = document.getElementById('admin-code').value.trim();
+            if (code !== ACCESS_CODE) {
+                msg.textContent = 'Code incorrect.';
+                msg.classList.add('error');
+                btn.disabled = false;
+                return;
+            }
+
+            sessionStorage.setItem(STORAGE_KEY, 'open');
+            msg.textContent = 'Acces valide. Redirection...';
+            msg.classList.add('success');
+            setTimeout(() => {
+                window.location.href = '/login.html?redirect=%2Fdashboard.html';
+            }, 350);
+        });
+    </script>
+</body>
+</html>

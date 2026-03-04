@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/assets/agrikura-favicon.svg">
     <title>KYC - Agrikura</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="auth.css">
@@ -16,7 +17,7 @@
 
     <!-- Navigation -->
     <nav class="navbar">
-        <a href="/" class="logo"><img class="logo-img" src="/assets/agrikura-logo.svg" alt="Agrikura"><span class="logo-text">Agrikura</span><span class="dot">.</span></a>
+        <a href="/" class="logo"><span class="logo-mark"><img class="logo-img" src="/assets/agrikura-logo.svg" alt="Agrikura"></span><span class="logo-text">Agrikura</span><span class="dot">.</span></a>
         <button class="mobile-menu-toggle" id="mobile-menu-btn" aria-label="Menu">
             <span class="hamburger-line"></span>
             <span class="hamburger-line"></span>
@@ -34,8 +35,8 @@
     <main class="auth-page" id="main-content">
         <div class="auth-card">
             <div class="auth-header">
-                <h1>🆔 Vérification d'Identité (KYC)</h1>
-                <p>Pour investir sur Agrikura, nous devons vérifier votre identité selon les réglementations en vigueur.</p>
+                <h1>ðŸ†” VÃ©rification d'IdentitÃ© (KYC)</h1>
+                <p>Pour investir sur Agrikura, nous devons vÃ©rifier votre identitÃ© selon les rÃ©glementations en vigueur.</p>
             </div>
 
             <div id="kyc-status" class="kyc-status">
@@ -44,7 +45,7 @@
 
             <form id="kyc-form" class="kyc-form">
                 <div class="form-section">
-                    <h3>📋 Informations Personnelles</h3>
+                    <h3>ðŸ“‹ Informations Personnelles</h3>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="nom_complet">Nom complet *</label>
@@ -58,39 +59,39 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="nationalite">Nationalité *</label>
+                            <label for="nationalite">NationalitÃ© *</label>
                             <select id="nationalite" name="nationalite" required>
-                                <option value="">Sélectionner</option>
-                                <option value="ci">Côte d'Ivoire</option>
+                                <option value="">SÃ©lectionner</option>
+                                <option value="ci">CÃ´te d'Ivoire</option>
                                 <option value="fr">France</option>
                                 <option value="other">Autre</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="numero_telephone">Numéro de téléphone *</label>
+                            <label for="numero_telephone">NumÃ©ro de tÃ©lÃ©phone *</label>
                             <input type="tel" id="numero_telephone" name="numero_telephone" required>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="adresse">Adresse complète *</label>
+                        <label for="adresse">Adresse complÃ¨te *</label>
                         <textarea id="adresse" name="adresse" rows="3" required></textarea>
                     </div>
                 </div>
 
                 <div class="form-section">
-                    <h3>📄 Documents Requis</h3>
+                    <h3>ðŸ“„ Documents Requis</h3>
 
                     <div class="document-upload">
                         <div class="document-item">
-                            <h4>Carte d'identité ou Passeport</h4>
-                            <p>Recto et verso de votre pièce d'identité</p>
+                            <h4>Carte d'identitÃ© ou Passeport</h4>
+                            <p>Recto et verso de votre piÃ¨ce d'identitÃ©</p>
                             <div class="upload-area" data-document="id_card">
                                 <input type="file" id="id_card" name="id_card" accept="image/*,.pdf" multiple required>
                                 <div class="upload-placeholder">
-                                    <div class="upload-icon">📷</div>
-                                    <p>Cliquez pour sélectionner les fichiers</p>
-                                    <small>Formats acceptés: JPG, PNG, PDF (Max 10MB)</small>
+                                    <div class="upload-icon">ðŸ“·</div>
+                                    <p>Cliquez pour sÃ©lectionner les fichiers</p>
+                                    <small>Formats acceptÃ©s: JPG, PNG, PDF (Max 10MB)</small>
                                 </div>
                                 <div class="file-list" id="id_card_files"></div>
                             </div>
@@ -98,13 +99,13 @@
 
                         <div class="document-item">
                             <h4>Justificatif de domicile</h4>
-                            <p>Facture d'électricité, eau ou téléphone (moins de 3 mois)</p>
+                            <p>Facture d'Ã©lectricitÃ©, eau ou tÃ©lÃ©phone (moins de 3 mois)</p>
                             <div class="upload-area" data-document="proof_address">
                                 <input type="file" id="proof_address" name="proof_address" accept="image/*,.pdf" required>
                                 <div class="upload-placeholder">
-                                    <div class="upload-icon">🏠</div>
-                                    <p>Cliquez pour sélectionner le fichier</p>
-                                    <small>Formats acceptés: JPG, PNG, PDF (Max 10MB)</small>
+                                    <div class="upload-icon">ðŸ </div>
+                                    <p>Cliquez pour sÃ©lectionner le fichier</p>
+                                    <small>Formats acceptÃ©s: JPG, PNG, PDF (Max 10MB)</small>
                                 </div>
                                 <div class="file-list" id="proof_address_files"></div>
                             </div>
@@ -113,19 +114,19 @@
                 </div>
 
                 <div class="form-section">
-                    <h3>🔒 Consentements</h3>
+                    <h3>ðŸ”’ Consentements</h3>
 
                     <div class="consent-item">
                         <input type="checkbox" id="consent_kyc" name="consent_kyc" required>
                         <label for="consent_kyc">
-                            J'accepte que mes données personnelles soient traitées dans le cadre de la vérification d'identité (KYC) conformément à notre <a href="/politique-confidentialite.html" target="_blank">politique de confidentialité</a>.
+                            J'accepte que mes donnÃ©es personnelles soient traitÃ©es dans le cadre de la vÃ©rification d'identitÃ© (KYC) conformÃ©ment Ã  notre <a href="/politique-confidentialite.html" target="_blank">politique de confidentialitÃ©</a>.
                         </label>
                     </div>
 
                     <div class="consent-item">
                         <input type="checkbox" id="consent_fatca" name="consent_fatca" required>
                         <label for="consent_fatca">
-                            Je confirme ne pas être un contribuable américain soumis à la loi FATCA.
+                            Je confirme ne pas Ãªtre un contribuable amÃ©ricain soumis Ã  la loi FATCA.
                         </label>
                     </div>
                 </div>
@@ -181,7 +182,7 @@
                     fileItem.innerHTML = `
                         <span class="file-name">${file.name}</span>
                         <span class="file-size">(${formatFileSize(file.size)})</span>
-                        <button type="button" class="remove-file" data-index="${index}">×</button>
+                        <button type="button" class="remove-file" data-index="${index}">Ã—</button>
                     `;
                     fileList.appendChild(fileItem);
                 });
@@ -244,7 +245,7 @@
 
                 await soumettreKYC(kycData);
 
-                showNotification('Demande KYC soumise avec succès ! Vous recevrez une confirmation par email.', 'success');
+                showNotification('Demande KYC soumise avec succÃ¨s ! Vous recevrez une confirmation par email.', 'success');
                 setTimeout(() => window.location.href = '/dashboard.html', 3000);
 
             } catch (error) {
@@ -275,8 +276,8 @@
             if (!status) {
                 statusDiv.innerHTML = `
                     <div class="status-card status-pending">
-                        <h3>📝 Statut KYC: Non soumis</h3>
-                        <p>Veuillez compléter le formulaire ci-dessous pour vérifier votre identité.</p>
+                        <h3>ðŸ“ Statut KYC: Non soumis</h3>
+                        <p>Veuillez complÃ©ter le formulaire ci-dessous pour vÃ©rifier votre identitÃ©.</p>
                     </div>
                 `;
                 return;
@@ -287,36 +288,36 @@
             switch (status.statut) {
                 case 'pending':
                     statusClass = 'status-pending';
-                    statusIcon = '⏳';
-                    statusText = 'En cours de vérification';
-                    statusDesc = 'Votre demande est en cours d\'examen. Vous serez notifié par email.';
+                    statusIcon = 'â³';
+                    statusText = 'En cours de vÃ©rification';
+                    statusDesc = 'Votre demande est en cours d\'examen. Vous serez notifiÃ© par email.';
                     form.style.display = 'none';
                     break;
                 case 'approved':
                     statusClass = 'status-approved';
-                    statusIcon = '✅';
-                    statusText = 'Approuvé';
-                    statusDesc = 'Votre identité a été vérifiée. Vous pouvez maintenant investir.';
+                    statusIcon = 'âœ…';
+                    statusText = 'ApprouvÃ©';
+                    statusDesc = 'Votre identitÃ© a Ã©tÃ© vÃ©rifiÃ©e. Vous pouvez maintenant investir.';
                     form.style.display = 'none';
                     break;
                 case 'rejected':
                     statusClass = 'status-rejected';
-                    statusIcon = '❌';
-                    statusText = 'Refusé';
-                    statusDesc = `Votre demande a été refusée: ${status.commentaire || 'Raison non spécifiée'}. Veuillez corriger et soumettre à nouveau.`;
+                    statusIcon = 'âŒ';
+                    statusText = 'RefusÃ©';
+                    statusDesc = `Votre demande a Ã©tÃ© refusÃ©e: ${status.commentaire || 'Raison non spÃ©cifiÃ©e'}. Veuillez corriger et soumettre Ã  nouveau.`;
                     break;
                 default:
                     statusClass = 'status-pending';
-                    statusIcon = '📝';
+                    statusIcon = 'ðŸ“';
                     statusText = 'Non soumis';
-                    statusDesc = 'Veuillez compléter le formulaire ci-dessous.';
+                    statusDesc = 'Veuillez complÃ©ter le formulaire ci-dessous.';
             }
 
             statusDiv.innerHTML = `
                 <div class="status-card ${statusClass}">
                     <h3>${statusIcon} Statut KYC: ${statusText}</h3>
                     <p>${statusDesc}</p>
-                    ${status.date_soumission ? `<small>Dernière mise à jour: ${new Date(status.date_soumission).toLocaleDateString('fr-FR')}</small>` : ''}
+                    ${status.date_soumission ? `<small>DerniÃ¨re mise Ã  jour: ${new Date(status.date_soumission).toLocaleDateString('fr-FR')}</small>` : ''}
                 </div>
             `;
         }
@@ -347,7 +348,7 @@
                 <div class="notification-content">
                     <p>${message}</p>
                 </div>
-                <button class="close-notification" onclick="this.parentElement.remove()">×</button>
+                <button class="close-notification" onclick="this.parentElement.remove()">Ã—</button>
             `;
             container.appendChild(notification);
 

@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/assets/agrikura-favicon.svg">
     <title>Marketplace | Agrikura</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="new-sections.css">
-    <link rel="stylesheet" href="marketplace-performance.css">
     <link rel="stylesheet" href="auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <nav class="navbar">
-        <a href="/" class="logo"><img class="logo-img" src="/assets/agrikura-logo.svg" alt="Agrikura"><span class="logo-text">Agrikura</span><span class="dot">.</span></a>
+        <a href="/" class="logo"><span class="logo-mark"><img class="logo-img" src="/assets/agrikura-logo.svg" alt="Agrikura"></span><span class="logo-text">Agrikura</span><span class="dot">.</span></a>
         <button class="mobile-menu-toggle" id="mobile-menu-btn" aria-label="Menu">
             <span class="hamburger-line"></span>
             <span class="hamburger-line"></span>
@@ -23,15 +23,15 @@
             <li><a href="/">Accueil</a></li>
             <li><a href="/marketplace.html" style="color: var(--accent-color);">Marketplace</a></li>
             <li><a href="/#faq">FAQ</a></li>
-            <li><a href="/login.html" class="btn-connect">Espace Investisseur</a></li>
+            <li><a href="#" class="btn-connect">Espace Investisseur</a></li>
         </ul>
     </nav>
 
     <section class="marketplace" style="padding-top: 120px;">
         <div class="section-header">
-            <span class="section-tag">🌿 Investir</span>
+            <span class="section-tag">ðŸŒ¿ Investir</span>
             <h2>Projets <span class="highlight">Disponibles</span></h2>
-            <p>Découvrez les exploitations agricoles qui n'attendent que votre soutien.</p>
+            <p>DÃ©couvrez les exploitations agricoles qui n'attendent que votre soutien.</p>
         </div>
         <div class="projects-grid" id="projects-grid">
             <div class="loading-spinner"><div class="spinner"></div><p>Chargement des projets...</p></div>
@@ -48,24 +48,24 @@
             <div class="payment-methods">
                 <label class="payment-option">
                     <input type="radio" name="payment" value="wave" checked>
-                    <span>📱 Wave</span>
+                    <span>ðŸ“± Wave</span>
                 </label>
                 <label class="payment-option">
                     <input type="radio" name="payment" value="orange">
-                    <span>📲 Orange Money</span>
+                    <span>ðŸ“² Orange Money</span>
                 </label>
                 <label class="payment-option">
                     <input type="radio" name="payment" value="mtn">
-                    <span>📞 MTN MoMo</span>
+                    <span>ðŸ“ž MTN MoMo</span>
                 </label>
                 <label class="payment-option">
                     <input type="radio" name="payment" value="moov">
-                    <span>💳 Moov Money</span>
+                    <span>ðŸ’³ Moov Money</span>
                 </label>
             </div>
 
             <div class="investment-amount">
-                <label for="amount">Montant à investir (FCFA)</label>
+                <label for="amount">Montant Ã  investir (FCFA)</label>
                 <input type="number" id="amount" placeholder="Ex: 50 000" min="5000" step="5000">
                 <small>Minimum d'investissement : 5 000 FCFA</small>
             </div>
