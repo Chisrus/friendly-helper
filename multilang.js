@@ -1,73 +1,73 @@
-// ==== SYSTÈME MULTILINGUE ====
+// ==== SYST�ME MULTILINGUE ====
 const translations = {
     fr: {
         // Navigation
         'Le Concept': 'Le Concept',
         'Marketplace': 'Marketplace',
         'Impact': 'Impact',
-        'Équipe': 'Équipe',
-        'Sécurité': 'Sécurité',
+        '�quipe': '�quipe',
+        'S�curit�': 'S�curit�',
         'Espace Investisseur': 'Espace Investisseur',
         
         // Hero
-        'hero_title': 'La Finance Agricole <br><span class="highlight">Réinventée</span>.',
-        'hero_subtitle': 'Soutenez des projets agricoles réels, suivez les rendements via nos capteurs connectés, et participez à l\'agriculture de demain grâce à notre plateforme innovante.',
+        'hero_title': 'La Finance Agricole <br><span class="highlight">R�invent�e</span>.',
+        'hero_subtitle': 'Soutenez des projets agricoles r�els, suivez les rendements via nos capteurs connect�s, et participez � l\'agriculture de demain gr�ce � notre plateforme innovante.',
         'explore_fields': 'Explorer les Champs',
-        'discover_concept': 'Découvrir le Concept',
+        'discover_concept': 'D�couvrir le Concept',
         
         // Concept
-        'how_it_works': 'Comment ça <span class="highlight">Marche ?</span>',
+        'how_it_works': 'Comment �a <span class="highlight">Marche ?</span>',
         'how_it_works_subtitle': 'Un processus simple et transparent garanti par notre technologie.',
         'step1_title': 'Choisissez un Projet',
-        'step1_desc': 'Parcourez la place de marché et sélectionnez une culture avec un rendement qui vous convient.',
+        'step1_desc': 'Parcourez la place de march� et s�lectionnez une culture avec un rendement qui vous convient.',
         'step2_title': 'Financez en Direct',
-        'step2_desc': 'Investissez directement via votre espace personnel. Pas d\'intermédiaires, plus de gains partagés.',
-        'step3_title': 'Suivez et Récoltez',
-        'step3_desc': 'Vérifiez les données du champ connectées aux capteurs et recevez vos rendements à la récolte.',
+        'step2_desc': 'Investissez directement via votre espace personnel. Pas d\'interm�diaires, plus de gains partag�s.',
+        'step3_title': 'Suivez et R�coltez',
+        'step3_desc': 'V�rifiez les donn�es du champ connect�es aux capteurs et recevez vos rendements � la r�colte.',
         
         // Marketplace
         'available_projects': 'Projets <span class="highlight">Disponibles</span>',
-        'marketplace_subtitle': 'Découvrez les exploitations agricoles qui n\'attendent que votre soutien.',
+        'marketplace_subtitle': 'D�couvrez les exploitations agricoles qui n\'attendent que votre soutien.',
         'invest_now': 'Investir Maintenant',
         'estimated_return': 'Rendement Est.',
         'funding': 'Financement',
         
         // Statistics
         'our_impact': 'Notre <span class="highlight">Impact</span>',
-        'impact_subtitle': 'Des chiffres qui parlent d\'eux-mêmes',
-        'hectares_cultivated': 'Hectares Cultivés',
+        'impact_subtitle': 'Des chiffres qui parlent d\'eux-m�mes',
+        'hectares_cultivated': 'Hectares Cultiv�s',
         'farmers_supported': 'Agriculteurs Soutenus',
         'fcfa_invested': 'FCFA Investis',
         'avg_return': '% Rendement Moyen',
         
         // Team
-        'our_team': 'Notre <span class="highlight">Équipe</span>',
-        'team_subtitle': 'Des experts passionnés au service de l\'agriculture',
+        'our_team': 'Notre <span class="highlight">�quipe</span>',
+        'team_subtitle': 'Des experts passionn�s au service de l\'agriculture',
         'our_partners': 'Nos <span class="highlight">Partenaires</span>',
         
         // Testimonials
         'they_trust_us': 'Ils Nous <span class="highlight">Font Confiance</span>',
-        'testimonials_subtitle': 'Retours d\'expérience de nos partenaires',
+        'testimonials_subtitle': 'Retours d\'exp�rience de nos partenaires',
         
         // Risk & Guarantees
-        'transparency_security': 'Transparence et <span class="highlight">Sécurité</span>',
+        'transparency_security': 'Transparence et <span class="highlight">S�curit�</span>',
         'risk_subtitle': 'Tout ce que vous devez savoir sur votre investissement',
         'guarantees': 'Nos Garanties',
         'risks': 'Risques Potentiels',
         'performance': 'Performance Historique',
-        'success_rate': 'Taux de réussite',
+        'success_rate': 'Taux de r�ussite',
         'avg_performance': 'Rendement moyen',
-        'delivered_projects': 'Projets livrés',
+        'delivered_projects': 'Projets livr�s',
         'important_info': 'Informations Importantes',
-        'disclaimer': 'Les investissements agricoles comportent des risques. Pass performance ne garantit pas les résultats futurs. Nous vous recommandons de diversifier vos investissements et de ne pas investir plus que ce que vous pouvez vous permettre de perdre.'
+        'disclaimer': 'Les investissements agricoles comportent des risques. Pass performance ne garantit pas les r�sultats futurs. Nous vous recommandons de diversifier vos investissements et de ne pas investir plus que ce que vous pouvez vous permettre de perdre.'
     },
     en: {
         // Navigation
         'Le Concept': 'How it Works',
         'Marketplace': 'Marketplace',
         'Impact': 'Impact',
-        'Équipe': 'Team',
-        'Sécurité': 'Security',
+        '�quipe': 'Team',
+        'S�curit�': 'Security',
         'Espace Investisseur': 'Investor Space',
         
         // Hero
@@ -206,7 +206,7 @@ function updateSectionHeaders(lang) {
 
 function updateStatLabels(lang) {
     const statLabels = {
-        'Hectares Cultivés': translations[lang].hectares_cultivated,
+        'Hectares Cultiv�s': translations[lang].hectares_cultivated,
         'Agriculteurs Soutenus': translations[lang].farmers_supported,
         'FCFA Investis': translations[lang].fcfa_invested,
         '% Rendement Moyen': translations[lang].avg_return

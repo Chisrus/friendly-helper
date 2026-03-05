@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/svg+xml" href="/assets/agrikura-favicon.svg">
     <title>KYC - Agrikura</title>
+    <meta name="robots" content="noindex,nofollow,noarchive">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="auth.css">
     <link rel="stylesheet" href="accessibility.css">
@@ -145,10 +146,21 @@
     </main>
 
     <div id="notification-container" class="notification-container"></div>
-
     <script type="module">
         import { requireAuth, getProfil } from './auth.js';
         import { soumettreKYC, getStatutKYC } from './db.js';
+
+        const HTML_ESCAPE_MAP = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        };
+
+        function escapeHtml(value) {
+            return String(value ?? '').replace(/[&<>"']/g, (char) => HTML_ESCAPE_MAP[char]);
+        }
 
         // Mobile menu
         const mobileBtn = document.getElementById('mobile-menu-btn');
@@ -179,11 +191,22 @@
                 files.forEach((file, index) => {
                     const fileItem = document.createElement('div');
                     fileItem.className = 'file-item';
-                    fileItem.innerHTML = `
-                        <span class="file-name">${file.name}</span>
-                        <span class="file-size">(${formatFileSize(file.size)})</span>
-                        <button type="button" class="remove-file" data-index="${index}">Ã—</button>
-                    `;
+
+                    const fileName = document.createElement('span');
+                    fileName.className = 'file-name';
+                    fileName.textContent = file.name;
+
+                    const fileSize = document.createElement('span');
+                    fileSize.className = 'file-size';
+                    fileSize.textContent = `(${formatFileSize(file.size)})`;
+
+                    const removeBtn = document.createElement('button');
+                    removeBtn.type = 'button';
+                    removeBtn.className = 'remove-file';
+                    removeBtn.setAttribute('data-index', String(index));
+                    removeBtn.textContent = '×';
+
+                    fileItem.append(fileName, fileSize, removeBtn);
                     fileList.appendChild(fileItem);
                 });
 
@@ -193,7 +216,7 @@
             // Remove file functionality
             fileList.addEventListener('click', (e) => {
                 if (e.target.classList.contains('remove-file')) {
-                    const index = parseInt(e.target.dataset.index);
+                    const index = parseInt(e.target.dataset.index, 10);
                     const dt = new DataTransfer();
                     const files = Array.from(input.files);
 
@@ -238,16 +261,15 @@
                     nationalite: formData.get('nationalite'),
                     numero_telephone: formData.get('numero_telephone'),
                     adresse: formData.get('adresse'),
-                    documents: documents,
+                    documents,
                     consent_kyc: formData.get('consent_kyc') === 'on',
                     consent_fatca: formData.get('consent_fatca') === 'on'
                 };
 
                 await soumettreKYC(kycData);
 
-                showNotification('Demande KYC soumise avec succÃ¨s ! Vous recevrez une confirmation par email.', 'success');
+                showNotification('Demande KYC soumise avec succès ! Vous recevrez une confirmation par email.', 'success');
                 setTimeout(() => window.location.href = '/dashboard.html', 3000);
-
             } catch (error) {
                 console.error('Erreur KYC:', error);
                 showNotification('Erreur lors de la soumission: ' + error.message, 'error');
@@ -276,8 +298,8 @@
             if (!status) {
                 statusDiv.innerHTML = `
                     <div class="status-card status-pending">
-                        <h3>ðŸ“ Statut KYC: Non soumis</h3>
-                        <p>Veuillez complÃ©ter le formulaire ci-dessous pour vÃ©rifier votre identitÃ©.</p>
+                        <h3>📝 Statut KYC: Non soumis</h3>
+                        <p>Veuillez compléter le formulaire ci-dessous pour vérifier votre identité.</p>
                     </div>
                 `;
                 return;
@@ -288,36 +310,36 @@
             switch (status.statut) {
                 case 'pending':
                     statusClass = 'status-pending';
-                    statusIcon = 'â³';
-                    statusText = 'En cours de vÃ©rification';
-                    statusDesc = 'Votre demande est en cours d\'examen. Vous serez notifiÃ© par email.';
+                    statusIcon = '⏳';
+                    statusText = 'En cours de vérification';
+                    statusDesc = 'Votre demande est en cours d\'examen. Vous serez notifié par email.';
                     form.style.display = 'none';
                     break;
                 case 'approved':
                     statusClass = 'status-approved';
-                    statusIcon = 'âœ…';
-                    statusText = 'ApprouvÃ©';
-                    statusDesc = 'Votre identitÃ© a Ã©tÃ© vÃ©rifiÃ©e. Vous pouvez maintenant investir.';
+                    statusIcon = '✅';
+                    statusText = 'Approuvé';
+                    statusDesc = 'Votre identité a été vérifiée. Vous pouvez maintenant investir.';
                     form.style.display = 'none';
                     break;
                 case 'rejected':
                     statusClass = 'status-rejected';
-                    statusIcon = 'âŒ';
-                    statusText = 'RefusÃ©';
-                    statusDesc = `Votre demande a Ã©tÃ© refusÃ©e: ${status.commentaire || 'Raison non spÃ©cifiÃ©e'}. Veuillez corriger et soumettre Ã  nouveau.`;
+                    statusIcon = '❌';
+                    statusText = 'Refusé';
+                    statusDesc = `Votre demande a été refusée: ${status.commentaire || 'Raison non spécifiée'}. Veuillez corriger et soumettre à nouveau.`;
                     break;
                 default:
                     statusClass = 'status-pending';
-                    statusIcon = 'ðŸ“';
+                    statusIcon = '📝';
                     statusText = 'Non soumis';
-                    statusDesc = 'Veuillez complÃ©ter le formulaire ci-dessous.';
+                    statusDesc = 'Veuillez compléter le formulaire ci-dessous.';
             }
 
             statusDiv.innerHTML = `
                 <div class="status-card ${statusClass}">
                     <h3>${statusIcon} Statut KYC: ${statusText}</h3>
-                    <p>${statusDesc}</p>
-                    ${status.date_soumission ? `<small>DerniÃ¨re mise Ã  jour: ${new Date(status.date_soumission).toLocaleDateString('fr-FR')}</small>` : ''}
+                    <p>${escapeHtml(statusDesc)}</p>
+                    ${status.date_soumission ? `<small>Dernière mise à jour: ${new Date(status.date_soumission).toLocaleDateString('fr-FR')}</small>` : ''}
                 </div>
             `;
         }
@@ -344,12 +366,20 @@
             const container = document.getElementById('notification-container');
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
-            notification.innerHTML = `
-                <div class="notification-content">
-                    <p>${message}</p>
-                </div>
-                <button class="close-notification" onclick="this.parentElement.remove()">Ã—</button>
-            `;
+
+            const content = document.createElement('div');
+            content.className = 'notification-content';
+            const text = document.createElement('p');
+            text.textContent = String(message ?? '');
+            content.appendChild(text);
+
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'close-notification';
+            closeBtn.type = 'button';
+            closeBtn.textContent = '×';
+            closeBtn.addEventListener('click', () => notification.remove());
+
+            notification.append(content, closeBtn);
             container.appendChild(notification);
 
             setTimeout(() => {
@@ -363,3 +393,4 @@
     </script>
 </body>
 </html>
+

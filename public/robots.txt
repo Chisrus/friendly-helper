@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Pages privees/admin
+Disallow: /admin-access.html
+Disallow: /dashboard.html
+Disallow: /login.html
+Disallow: /register.html
+Disallow: /2fa-setup.html
+Disallow: /kyc.html
+Disallow: /invest-confirm.html
+Disallow: /redirect.html
+
+Sitemap: https://agrikura.farm/sitemap.xml

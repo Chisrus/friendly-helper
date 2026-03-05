@@ -5,11 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/svg+xml" href="/assets/agrikura-favicon.svg">
     <title>Agrikura | Rejoignez l'Agriculture de Demain</title>
-    <meta name="description" content="Inscrivez-vous comme agriculteur ou investisseur sur Agrikura, la plateforme d'investissement agricole connectÃ©e en CÃ´te d'Ivoire.">
+    <meta name="description" content="Agrikura est la plateforme agricole en Cote d'Ivoire pour connecter agriculteurs et investisseurs. Rejoignez la liste d'attente et suivez des projets concrets.">
+    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+    <meta name="theme-color" content="#2E7D32">
+    <link rel="canonical" href="https://agrikura.farm/">
+    <link rel="alternate" hreflang="fr" href="https://agrikura.farm/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Agrikura">
+    <meta property="og:title" content="Agrikura | Investissement agricole en Cote d'Ivoire">
+    <meta property="og:description" content="Rejoignez Agrikura pour financer et suivre des projets agricoles reels en Cote d'Ivoire.">
+    <meta property="og:url" content="https://agrikura.farm/">
+    <meta property="og:image" content="https://agrikura.farm/assets/agrikura-logo.svg">
+    <meta property="og:locale" content="fr_CI">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Agrikura | Investissement agricole en Cote d'Ivoire">
+    <meta name="twitter:description" content="Plateforme agricole pour connecter agriculteurs et investisseurs en Cote d'Ivoire.">
+    <meta name="twitter:image" content="https://agrikura.farm/assets/agrikura-logo.svg">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="new-sections.css">
     <link rel="stylesheet" href="auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Agrikura",
+      "url": "https://agrikura.farm/",
+      "logo": "https://agrikura.farm/assets/agrikura-logo.svg",
+      "description": "Plateforme d'investissement agricole connectant agriculteurs et investisseurs en Cote d'Ivoire."
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Agrikura",
+      "url": "https://agrikura.farm/",
+      "inLanguage": "fr"
+    }
+    </script>
 </head>
 <body>
     <div id="role-gate" class="role-gate-overlay" aria-hidden="false">
@@ -17,7 +51,7 @@
             <button id="role-gate-close" class="role-gate-close" type="button" aria-label="Fermer" onclick="document.getElementById('role-gate').classList.add('hidden');document.getElementById('role-gate').setAttribute('aria-hidden','true');document.body.style.overflow='';">&times;</button>
             <p class="role-gate-kicker">Bienvenue sur Agrikura</p>
             <h2 id="role-gate-title">Choisissez votre profil</h2>
-            <p class="role-gate-text">Inscrivez-vous sur la liste d'attente pour Ãªtre parmi les premiers informÃ©s et bÃ©nÃ©ficier du programme.</p>
+            <p class="role-gate-text">Inscrivez-vous sur la liste d'attente pour être parmi les premiers informés et bénéficier du programme.</p>
             <div class="role-gate-actions">
                 <button
                     type="button"
@@ -53,10 +87,10 @@
     <header class="hero">
         <div class="hero-content">
             <h1>Rejoignez <br><span class="highlight">Agrikura</span>.</h1>
-            <p>Inscrivez-vous sur notre liste d'attente en tant qu'agriculteur ou investisseur pour participer Ã  l'agriculture de demain.</p>
+            <p>Inscrivez-vous sur notre liste d'attente en tant qu'agriculteur ou investisseur pour participer à l'agriculture de demain.</p>
             <div class="hero-buttons">
-                <button type="button" class="btn-secondary" id="btn-choose-agriculteur">ðŸŒ¾ Je suis Agriculteur</button>
-                <button type="button" class="btn-primary" id="btn-choose-investisseur">ðŸ’° Je suis Investisseur</button>
+                <button type="button" class="btn-secondary" id="btn-choose-agriculteur">🌾 Je suis Agriculteur</button>
+                <button type="button" class="btn-primary" id="btn-choose-investisseur">💰 Je suis Investisseur</button>
             </div>
         </div>
         <div class="hero-glow"></div>
@@ -65,7 +99,7 @@
     <!-- Section Formulaire d'inscription -->
     <section id="inscription" class="inscription-section">
         <div class="section-header">
-            <span class="section-tag">ðŸ“ Inscription</span>
+            <span class="section-tag">📝 Inscription</span>
             <h2>Inscrivez-vous sur la <span class="highlight">Liste d'Attente</span></h2>
             <p>Choisissez votre profil et remplissez le formulaire</p>
         </div>
@@ -78,22 +112,22 @@
                 id="toggle-agriculteur"
                 data-role="agriculteur"
                 onclick="document.getElementById('form-agriculteur').style.display='block';document.getElementById('form-investisseur').style.display='none';this.classList.add('active');document.getElementById('toggle-investisseur').classList.remove('active');"
-            >ðŸŒ¾ Agriculteur</button>
+            >🌾 Agriculteur</button>
             <button
                 type="button"
                 class="toggle-btn"
                 id="toggle-investisseur"
                 data-role="investisseur"
                 onclick="document.getElementById('form-agriculteur').style.display='none';document.getElementById('form-investisseur').style.display='block';this.classList.add('active');document.getElementById('toggle-agriculteur').classList.remove('active');"
-            >ðŸ’° Investisseur</button>
+            >💰 Investisseur</button>
         </div>
 
         <!-- Formulaire Agriculteur -->
         <div class="form-container" id="form-agriculteur">
             <div class="auth-card form-card-wide">
                 <div class="auth-header">
-                    <h2>ðŸŒ¾ Inscription <span class="highlight">Agriculteur</span></h2>
-                    <p>DÃ©crivez votre projet agricole et vos besoins en financement</p>
+                    <h2>🌾 Inscription <span class="highlight">Agriculteur</span></h2>
+                    <p>Décrivez votre projet agricole et vos besoins en financement</p>
                 </div>
                 <form id="form-agri" class="auth-form">
                     <div class="form-row">
@@ -102,13 +136,13 @@
                             <input type="text" id="agri-nom" placeholder="Kouadio" required maxlength="100">
                         </div>
                         <div class="form-group">
-                            <label for="agri-prenom">PrÃ©nom *</label>
+                            <label for="agri-prenom">Prénom *</label>
                             <input type="text" id="agri-prenom" placeholder="Yao" required maxlength="100">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="agri-contact">Contact (tÃ©lÃ©phone) *</label>
+                            <label for="agri-contact">Contact (téléphone) *</label>
                             <input type="tel" id="agri-contact" placeholder="+225 07 00 00 00" required maxlength="20">
                         </div>
                         <div class="form-group">
@@ -120,22 +154,22 @@
                         <div class="form-group">
                             <label for="agri-culture">Type de culture *</label>
                             <select id="agri-culture" required>
-                                <option value="">-- SÃ©lectionnez --</option>
+                                <option value="">-- Sélectionnez --</option>
                                 <option value="Cacao">Cacao</option>
-                                <option value="CafÃ©">CafÃ©</option>
+                                <option value="Café">Café</option>
                                 <option value="Riz">Riz</option>
-                                <option value="MaÃ¯s">MaÃ¯s</option>
+                                <option value="Maïs">Maïs</option>
                                 <option value="Manioc">Manioc</option>
-                                <option value="HÃ©vÃ©a">HÃ©vÃ©a</option>
-                                <option value="Palmier Ã  huile">Palmier Ã  huile</option>
+                                <option value="Hévéa">Hévéa</option>
+                                <option value="Palmier à huile">Palmier à huile</option>
                                 <option value="Anacarde">Anacarde</option>
                                 <option value="Banane Plantain">Banane Plantain</option>
-                                <option value="LÃ©gumes">LÃ©gumes</option>
+                                <option value="Légumes">Légumes</option>
                                 <option value="Autre">Autre</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="agri-capacite">CapacitÃ© du champ *</label>
+                            <label for="agri-capacite">Capacité du champ *</label>
                             <input type="text" id="agri-capacite" placeholder="Ex: 5 hectares" required maxlength="100">
                         </div>
                     </div>
@@ -144,15 +178,15 @@
                         <input type="number" id="agri-besoin" placeholder="Ex: 2000000" required min="0">
                     </div>
                     <div class="form-group">
-                        <label for="agri-activite">ÃŠtes-vous actuellement en activitÃ© ? *</label>
+                        <label for="agri-activite">Êtes-vous actuellement en activité ? *</label>
                         <div class="radio-group">
-                            <label class="radio-label"><input type="radio" name="agri-activite" value="true" required> Oui, je suis en activitÃ©</label>
-                            <label class="radio-label"><input type="radio" name="agri-activite" value="false"> Non, je ne suis pas en activitÃ©</label>
+                            <label class="radio-label"><input type="radio" name="agri-activite" value="true" required> Oui, je suis en activité</label>
+                            <label class="radio-label"><input type="radio" name="agri-activite" value="false"> Non, je ne suis pas en activité</label>
                         </div>
                     </div>
 
                     <button type="submit" class="btn-primary auth-btn" id="btn-submit-agri">
-                        ðŸ“© S'inscrire sur la liste d'attente
+                        📩 S'inscrire sur la liste d'attente
                     </button>
                     <div id="msg-agri" class="auth-message"></div>
                 </form>
@@ -163,8 +197,8 @@
         <div class="form-container" id="form-investisseur" style="display: none;">
             <div class="auth-card form-card-wide">
                 <div class="auth-header">
-                    <h2>ðŸ’° Inscription <span class="highlight">Investisseur</span></h2>
-                    <p>Indiquez votre capacitÃ© d'investissement pour Ãªtre contactÃ© en prioritÃ©</p>
+                    <h2>💰 Inscription <span class="highlight">Investisseur</span></h2>
+                    <p>Indiquez votre capacité d'investissement pour être contacté en priorité</p>
                 </div>
                 <form id="form-invest" class="auth-form">
                     <div class="form-row">
@@ -173,13 +207,13 @@
                             <input type="text" id="inv-nom" placeholder="Bamba" required maxlength="100">
                         </div>
                         <div class="form-group">
-                            <label for="inv-prenom">PrÃ©nom *</label>
+                            <label for="inv-prenom">Prénom *</label>
                             <input type="text" id="inv-prenom" placeholder="Sophie" required maxlength="100">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="inv-contact">Contact (tÃ©lÃ©phone) *</label>
+                            <label for="inv-contact">Contact (téléphone) *</label>
                             <input type="tel" id="inv-contact" placeholder="+225 07 00 00 00" required maxlength="20">
                         </div>
                         <div class="form-group">
@@ -188,12 +222,12 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="inv-capacite">CapacitÃ© Ã  financer (FCFA) *</label>
+                        <label for="inv-capacite">Capacité à financer (FCFA) *</label>
                         <input type="number" id="inv-capacite" placeholder="Ex: 5000000" required min="0">
                     </div>
 
                     <button type="submit" class="btn-primary auth-btn" id="btn-submit-inv">
-                        ðŸ“© S'inscrire sur la liste d'attente
+                        📩 S'inscrire sur la liste d'attente
                     </button>
                     <div id="msg-inv" class="auth-message"></div>
                 </form>
@@ -204,8 +238,8 @@
     <!-- Le Concept -->
     <section id="concept" class="concept-section">
         <div class="section-header">
-            <span class="section-tag">ðŸ”§ Processus</span>
-            <h2>Comment Ã§a <span class="highlight">Marche ?</span></h2>
+            <span class="section-tag">🔧 Processus</span>
+            <h2>Comment ça <span class="highlight">Marche ?</span></h2>
             <p>Un processus simple et transparent garanti par notre technologie.</p>
         </div>
         <div class="concept-steps">
@@ -217,7 +251,7 @@
             <div class="step">
                 <div class="step-number">2</div>
                 <h3>On Vous Contacte</h3>
-                <p>Notre Ã©quipe analyse votre profil et vous recontacte rapidement.</p>
+                <p>Notre équipe analyse votre profil et vous recontacte rapidement.</p>
             </div>
             <div class="step">
                 <div class="step-number">3</div>
@@ -230,38 +264,38 @@
 <!-- Risques & Garanties -->
     <section id="risk-guarantees" class="risk-section">
         <div class="section-header">
-            <span class="section-tag">ðŸ›¡ï¸ SÃ©curitÃ©</span>
-            <h2>Transparence et <span class="highlight">SÃ©curitÃ©</span></h2>
+            <span class="section-tag">🛡️ Sécurité</span>
+            <h2>Transparence et <span class="highlight">Sécurité</span></h2>
             <p>Tout ce que vous devez savoir sur votre investissement</p>
         </div>
         <div class="risk-grid">
             <div class="risk-card">
-                <div class="risk-icon">âœ…</div>
+                <div class="risk-icon">✅</div>
                 <h3>Nos Garanties</h3>
                 <ul class="risk-list">
                     <li>Assurance agricole sur chaque projet</li>
-                    <li>Suivi en temps rÃ©el par capteurs IoT</li>
+                    <li>Suivi en temps réel par capteurs IoT</li>
                     <li>Audits agronomiques trimestriels</li>
                     <li>Fond de garantie pour les investisseurs</li>
                 </ul>
             </div>
             <div class="risk-card">
-                <div class="risk-icon">âš ï¸</div>
+                <div class="risk-icon">⚠️</div>
                 <h3>Risques Potentiels</h3>
                 <ul class="risk-list risk-list-warning">
-                    <li>Conditions mÃ©tÃ©orologiques extrÃªmes</li>
-                    <li>Fluctuations des prix de marchÃ©</li>
+                    <li>Conditions météorologiques extrêmes</li>
+                    <li>Fluctuations des prix de marché</li>
                     <li>Risque de maladies des cultures</li>
-                    <li>DÃ©lais possibles sur les rÃ©coltes</li>
+                    <li>Délais possibles sur les récoltes</li>
                 </ul>
             </div>
             <div class="risk-card">
-                <div class="risk-icon">ðŸ“Š</div>
+                <div class="risk-icon">📊</div>
                 <h3>Performance</h3>
                 <div class="performance-stats">
-                    <div class="perf-item"><span class="perf-label">Taux de rÃ©ussite</span><span class="perf-value">94%</span></div>
+                    <div class="perf-item"><span class="perf-label">Taux de réussite</span><span class="perf-value">94%</span></div>
                     <div class="perf-item"><span class="perf-label">Rendement moyen</span><span class="perf-value">13.5%</span></div>
-                    <div class="perf-item"><span class="perf-label">Projets livrÃ©s</span><span class="perf-value">127</span></div>
+                    <div class="perf-item"><span class="perf-label">Projets livrés</span><span class="perf-value">127</span></div>
                 </div>
             </div>
         </div>
@@ -270,30 +304,30 @@
     <!-- FAQ -->
     <section id="faq" class="faq-section">
         <div class="section-header">
-            <span class="section-tag">â“ Aide</span>
-            <h2>Questions <span class="highlight">FrÃ©quentes</span></h2>
+            <span class="section-tag">❓ Aide</span>
+            <h2>Questions <span class="highlight">Fréquentes</span></h2>
         </div>
         <div class="faq-container">
             <div class="faq-category">
-                <h3>ðŸ’° Investissement</h3>
+                <h3>💰 Investissement</h3>
                 <div class="faq-item">
                     <button class="faq-question">Quel est le montant minimum d'investissement ? <span class="faq-icon">+</span></button>
                     <div class="faq-answer"><p>Le montant minimum est de 5 000 FCFA.</p></div>
                 </div>
                 <div class="faq-item">
-                    <button class="faq-question">Comment sont calculÃ©s les rendements ? <span class="faq-icon">+</span></button>
-                    <div class="faq-answer"><p>Les rendements sont estimÃ©s sur les donnÃ©es historiques et les conditions climatiques mesurÃ©es par nos capteurs IoT.</p></div>
+                    <button class="faq-question">Comment sont calculés les rendements ? <span class="faq-icon">+</span></button>
+                    <div class="faq-answer"><p>Les rendements sont estimés sur les données historiques et les conditions climatiques mesurées par nos capteurs IoT.</p></div>
                 </div>
             </div>
             <div class="faq-category">
-                <h3>ðŸŒ¾ Agriculteur</h3>
+                <h3>🌾 Agriculteur</h3>
                 <div class="faq-item">
                     <button class="faq-question">Comment s'inscrire en tant qu'agriculteur ? <span class="faq-icon">+</span></button>
-                    <div class="faq-answer"><p>Remplissez le formulaire d'inscription ci-dessus et notre Ã©quipe vous recontactera sous 48h.</p></div>
+                    <div class="faq-answer"><p>Remplissez le formulaire d'inscription ci-dessus et notre équipe vous recontactera sous 48h.</p></div>
                 </div>
                 <div class="faq-item">
-                    <button class="faq-question">Quels types de cultures sont acceptÃ©s ? <span class="faq-icon">+</span></button>
-                    <div class="faq-answer"><p>Cacao, cafÃ©, riz, maÃ¯s, manioc, hÃ©vÃ©a, palmier Ã  huile, anacarde, banane plantain, lÃ©gumes et bien d'autres.</p></div>
+                    <button class="faq-question">Quels types de cultures sont acceptés ? <span class="faq-icon">+</span></button>
+                    <div class="faq-answer"><p>Cacao, café, riz, maïs, manioc, hévéa, palmier à huile, anacarde, banane plantain, légumes et bien d'autres.</p></div>
                 </div>
             </div>
         </div>
@@ -304,7 +338,7 @@
         <div class="footer-content">
             <div class="footer-brand">
                 <div class="logo">Agrikura<span class="dot">.</span></div>
-                <p>La plateforme d'investissement agricole connectÃ©e en CÃ´te d'Ivoire.</p>
+                <p>La plateforme d'investissement agricole connectée en Côte d'Ivoire.</p>
             </div>
             <div class="footer-links">
                 <h4>Navigation</h4>
@@ -314,13 +348,13 @@
             </div>
             <div class="footer-links">
                 <h4>Contact</h4>
-                <a href="mailto:contact@agrikura.ci">contact@agrikura.ci</a>
-                <a href="tel:+2250700000000">+225 07 00 00 00 00</a>
-                <p>Abidjan, CÃ´te d'Ivoire</p>
+                <a href="mailto:contact.agrikura@gmail.com">contact.agrikura@gmail.com</a>
+                <a href="tel:+2250151239570">+2250151239570</a>
+                <p>Abidjan, Côte d'Ivoire</p>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 Agrikura. Tous droits rÃ©servÃ©s.</p>
+            <p>&copy; 2026 Agrikura. Tous droits réservés.</p>
         </div>
     </footer>
 
@@ -419,10 +453,10 @@
 
             const activiteValue = document.querySelector('input[name="agri-activite"]:checked');
             if (!activiteValue) {
-                msg.textContent = 'âŒ Veuillez indiquer si vous Ãªtes en activitÃ©.';
+                msg.textContent = '❌ Veuillez indiquer si vous êtes en activité.';
                 msg.classList.add('error');
                 btn.disabled = false;
-                btn.textContent = 'ðŸ“© S\'inscrire sur la liste d\'attente';
+                btn.textContent = '📩 S\'inscrire sur la liste d\'attente';
                 return;
             }
 
@@ -445,14 +479,14 @@
             }
 
             if (error) {
-                msg.textContent = 'âŒ Erreur : ' + (error.message || 'Configuration Supabase manquante.');
+                msg.textContent = '❌ Erreur : ' + (error.message || 'Configuration Supabase manquante.');
                 msg.classList.add('error');
                 btn.disabled = false;
-                btn.textContent = 'ðŸ“© S\'inscrire sur la liste d\'attente';
+                btn.textContent = '📩 S\'inscrire sur la liste d\'attente';
             } else {
-                msg.innerHTML = 'âœ… <b>Inscription rÃ©ussie !</b> Vous Ãªtes sur notre liste d\'attente. Notre Ã©quipe vous contactera bientÃ´t.';
+                msg.innerHTML = '✅ <b>Inscription réussie !</b> Vous êtes sur notre liste d\'attente. Notre équipe vous contactera bientôt.';
                 msg.classList.add('success');
-                btn.textContent = 'âœ… Inscrit !';
+                btn.textContent = '✅ Inscrit !';
                 e.target.reset();
             }
         });
@@ -483,14 +517,14 @@
             }
 
             if (error) {
-                msg.textContent = 'âŒ Erreur : ' + (error.message || 'Configuration Supabase manquante.');
+                msg.textContent = '❌ Erreur : ' + (error.message || 'Configuration Supabase manquante.');
                 msg.classList.add('error');
                 btn.disabled = false;
-                btn.textContent = 'ðŸ“© S\'inscrire sur la liste d\'attente';
+                btn.textContent = '📩 S\'inscrire sur la liste d\'attente';
             } else {
-                msg.innerHTML = 'âœ… <b>Inscription rÃ©ussie !</b> Vous Ãªtes sur notre liste d\'attente. Nous vous contacterons trÃ¨s prochainement.';
+                msg.innerHTML = '✅ <b>Inscription réussie !</b> Vous êtes sur notre liste d\'attente. Nous vous contacterons très prochainement.';
                 msg.classList.add('success');
-                btn.textContent = 'âœ… Inscrit !';
+                btn.textContent = '✅ Inscrit !';
                 e.target.reset();
             }
         });

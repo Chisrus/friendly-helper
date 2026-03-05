@@ -5,10 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/svg+xml" href="/assets/agrikura-favicon.svg">
     <title>Marketplace | Agrikura</title>
+    <meta name="description" content="Explorez la marketplace Agrikura et decouvrez des projets agricoles a financer en Cote d'Ivoire.">
+    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+    <meta name="theme-color" content="#2E7D32">
+    <link rel="canonical" href="https://agrikura.farm/marketplace.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Agrikura">
+    <meta property="og:title" content="Marketplace Agrikura | Projets agricoles a financer">
+    <meta property="og:description" content="Accedez aux opportunites de financement agricole sur Agrikura.">
+    <meta property="og:url" content="https://agrikura.farm/marketplace.html">
+    <meta property="og:image" content="https://agrikura.farm/assets/agrikura-logo.svg">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Marketplace Agrikura">
+    <meta name="twitter:description" content="Decouvrez les projets agricoles disponibles sur Agrikura.">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="new-sections.css">
     <link rel="stylesheet" href="auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Marketplace Agrikura",
+      "url": "https://agrikura.farm/marketplace.html",
+      "inLanguage": "fr"
+    }
+    </script>
 </head>
 <body>
 
@@ -29,9 +51,9 @@
 
     <section class="marketplace" style="padding-top: 120px;">
         <div class="section-header">
-            <span class="section-tag">ðŸŒ¿ Investir</span>
+            <span class="section-tag">🌿 Investir</span>
             <h2>Projets <span class="highlight">Disponibles</span></h2>
-            <p>DÃ©couvrez les exploitations agricoles qui n'attendent que votre soutien.</p>
+            <p>Découvrez les exploitations agricoles qui n'attendent que votre soutien.</p>
         </div>
         <div class="projects-grid" id="projects-grid">
             <div class="loading-spinner"><div class="spinner"></div><p>Chargement des projets...</p></div>
@@ -48,24 +70,24 @@
             <div class="payment-methods">
                 <label class="payment-option">
                     <input type="radio" name="payment" value="wave" checked>
-                    <span>ðŸ“± Wave</span>
+                    <span>📱 Wave</span>
                 </label>
                 <label class="payment-option">
                     <input type="radio" name="payment" value="orange">
-                    <span>ðŸ“² Orange Money</span>
+                    <span>📲 Orange Money</span>
                 </label>
                 <label class="payment-option">
                     <input type="radio" name="payment" value="mtn">
-                    <span>ðŸ“ž MTN MoMo</span>
+                    <span>📞 MTN MoMo</span>
                 </label>
                 <label class="payment-option">
                     <input type="radio" name="payment" value="moov">
-                    <span>ðŸ’³ Moov Money</span>
+                    <span>💳 Moov Money</span>
                 </label>
             </div>
 
             <div class="investment-amount">
-                <label for="amount">Montant Ã  investir (FCFA)</label>
+                <label for="amount">Montant à investir (FCFA)</label>
                 <input type="number" id="amount" placeholder="Ex: 50 000" min="5000" step="5000">
                 <small>Minimum d'investissement : 5 000 FCFA</small>
             </div>

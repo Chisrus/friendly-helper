@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/svg+xml" href="/assets/agrikura-favicon.svg">
     <title>Confirmer l'Investissement | Agrikura</title>
+    <meta name="robots" content="noindex,nofollow,noarchive">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -66,19 +67,35 @@
     </main>
 
     <div id="notification-container" class="notification-container"></div>
-
     <script type="module">
         import { requireAuth, deconnexion } from './auth.js';
         import { chargerProjets, enregistrerInvestissementComplet } from './db.js';
+
+        const HTML_ESCAPE_MAP = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        };
+
+        function escapeHtml(value) {
+            return String(value ?? '').replace(/[&<>"']/g, (char) => HTML_ESCAPE_MAP[char]);
+        }
+
+        function toFiniteNumber(value, fallback = 0) {
+            const parsed = Number(value);
+            return Number.isFinite(parsed) ? parsed : fallback;
+        }
 
         (async () => {
             const user = await requireAuth();
             if (!user) return;
 
-            // RÃ©cupÃ©rer les paramÃ¨tres d'URL
+            // Récupérer les paramètres d'URL
             const urlParams = new URLSearchParams(window.location.search);
             const projetId = urlParams.get('projet');
-            const montant = parseInt(urlParams.get('montant'));
+            const montant = parseInt(urlParams.get('montant'), 10);
             const methode = urlParams.get('methode');
 
             if (!projetId || !montant || !methode) {
@@ -86,41 +103,47 @@
                 return;
             }
 
-            // Charger les projets et trouver le projet sÃ©lectionnÃ©
+            // Charger les projets et trouver le projet sélectionné
             const projets = await chargerProjets();
-            const projet = projets.find(p => p.id === projetId);
+            const projet = projets.find((p) => p.id === projetId);
 
             if (!projet) {
-                montrerNotification('âŒ Projet introuvable', 'error');
-                setTimeout(() => window.location.href = '/marketplace.html', 2000);
+                montrerNotification('Projet introuvable.', 'error');
+                setTimeout(() => (window.location.href = '/marketplace.html'), 2000);
                 return;
             }
 
             // Calculer les projections
-            const dureeMois = projet.duree_estimee || 12; // DurÃ©e par dÃ©faut 12 mois
-            const rendementAnnuel = projet.rendement_estime / 100;
+            const dureeMois = toFiniteNumber(projet.duree_estimee, 12);
+            const rendementAnnuel = toFiniteNumber(projet.rendement_estime) / 100;
             const rendementTotal = montant * rendementAnnuel;
             const retourTotal = montant + rendementTotal;
-            const rendementMensuel = rendementTotal / dureeMois;
 
             // Analyse de risque simple
             const risqueScore = analyserRisqueProjet(projet);
+            const safeTitre = escapeHtml(projet.titre);
+            const safeLocalisation = escapeHtml(projet.localisation);
+            const safeCulture = escapeHtml(projet.culture);
+            const safeMethode = escapeHtml(getPaymentMethodName(methode));
+            const safeRisqueNiveau = escapeHtml(risqueScore.niveau);
+            const safeRisqueDescription = escapeHtml(risqueScore.description);
+            const safeRisqueFacteurs = risqueScore.facteurs.map((facteur) => escapeHtml(facteur)).join(' • ');
 
-            // GÃ©nÃ©rer le contenu
+            // Générer le contenu
             document.getElementById('investment-summary').innerHTML = `
                 <div class="summary-grid">
                     <div class="summary-item">
-                        <h4>${projet.titre}</h4>
-                        <p>ðŸ“ ${projet.localisation}</p>
-                        <p>ðŸŒ± Culture: ${projet.culture}</p>
+                        <h4>${safeTitre}</h4>
+                        <p>📍 ${safeLocalisation}</p>
+                        <p>🌱 Culture: ${safeCulture}</p>
                     </div>
                     <div class="summary-item">
-                        <h4>Montant Investi</h4>
+                        <h4>Montant investi</h4>
                         <p class="amount">${montant.toLocaleString('fr-FR')} FCFA</p>
                     </div>
                     <div class="summary-item">
-                        <h4>Mode de Paiement</h4>
-                        <p>${getPaymentMethodName(methode)}</p>
+                        <h4>Mode de paiement</h4>
+                        <p>${safeMethode}</p>
                     </div>
                 </div>
             `;
@@ -128,12 +151,12 @@
             document.getElementById('risk-content').innerHTML = `
                 <div class="risk-indicator" style="background: ${risqueScore.couleur}20; border-left: 4px solid ${risqueScore.couleur};">
                     <div class="risk-level">
-                        <span class="risk-icon">${risqueScore.icone}</span>
-                        <span class="risk-text">${risqueScore.niveau} (${risqueScore.score}/100)</span>
+                        <span class="risk-icon">${escapeHtml(risqueScore.icone)}</span>
+                        <span class="risk-text">${safeRisqueNiveau} (${risqueScore.score}/100)</span>
                     </div>
-                    <p class="risk-description">${risqueScore.description}</p>
+                    <p class="risk-description">${safeRisqueDescription}</p>
                     <div class="risk-factors">
-                        <small>${risqueScore.facteurs.join(' â€¢ ')}</small>
+                        <small>${safeRisqueFacteurs}</small>
                     </div>
                 </div>
             `;
@@ -145,29 +168,29 @@
                         <span class="value">${montant.toLocaleString('fr-FR')} FCFA</span>
                     </div>
                     <div class="roi-item">
-                        <span class="label">Rendement annuel estimÃ©</span>
-                        <span class="value highlight">${projet.rendement_estime}%</span>
+                        <span class="label">Rendement annuel estimé</span>
+                        <span class="value highlight">${toFiniteNumber(projet.rendement_estime)}%</span>
                     </div>
                     <div class="roi-item">
-                        <span class="label">Gain annuel projetÃ©</span>
+                        <span class="label">Gain annuel projeté</span>
                         <span class="value positive">+${rendementTotal.toLocaleString('fr-FR')} FCFA</span>
                     </div>
                     <div class="roi-item">
-                        <span class="label">Retour total estimÃ©</span>
+                        <span class="label">Retour total estimé</span>
                         <span class="value positive">${retourTotal.toLocaleString('fr-FR')} FCFA</span>
                     </div>
                 </div>
                 <div class="roi-note">
-                    <small>âš ï¸ Les projections sont estimatives et dÃ©pendent des conditions mÃ©tÃ©orologiques et du marchÃ©.</small>
+                    <small>⚠️ Les projections sont estimatives et dépendent des conditions météorologiques et du marché.</small>
                 </div>
             `;
 
             document.getElementById('payment-content').innerHTML = `
                 <div class="payment-info">
-                    <p><strong>Mode de paiement:</strong> ${getPaymentMethodName(methode)}</p>
+                    <p><strong>Mode de paiement:</strong> ${safeMethode}</p>
                     <p><strong>Montant:</strong> ${montant.toLocaleString('fr-FR')} FCFA</p>
                     <p><strong>Frais de transaction:</strong> Inclus dans le montant</p>
-                    <p><strong>DÃ©lai de traitement:</strong> 24-48h</p>
+                    <p><strong>Délai de traitement:</strong> 24-48h</p>
                 </div>
             `;
 
@@ -183,12 +206,12 @@
 
                 try {
                     // Simuler le traitement du paiement
-                    msg.textContent = 'ðŸ”„ VÃ©rification du paiement...';
+                    msg.textContent = 'Vérification du paiement...';
                     msg.classList.add('info');
-                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    await new Promise((resolve) => setTimeout(resolve, 2000));
 
-                    msg.textContent = 'ðŸ’° Traitement du paiement...';
-                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    msg.textContent = 'Traitement du paiement...';
+                    await new Promise((resolve) => setTimeout(resolve, 1500));
 
                     // Enregistrer l'investissement avec calculs complets
                     const result = await enregistrerInvestissementComplet(
@@ -198,23 +221,22 @@
                         user.id
                     );
 
-                    msg.textContent = 'âœ… Investissement enregistrÃ© avec succÃ¨s !';
+                    msg.textContent = 'Investissement enregistré avec succès !';
                     msg.classList.add('success');
 
-                    // Afficher un rÃ©sumÃ© dÃ©taillÃ©
+                    // Afficher un résumé détaillé
                     setTimeout(() => {
-                        const details = `
-                            ðŸ’° Investissement: ${montant.toLocaleString('fr-FR')} FCFA<br>
-                            ðŸ“ˆ ROI estimÃ©: ${(result.projections.roi).toFixed(1)}%<br>
-                            ðŸŽ¯ Gain projetÃ©: +${result.projections.gainAnnuel.toLocaleString('fr-FR')} FCFA<br>
-                            ðŸ“Š Niveau de risque: ${result.projections.analyseRisque.niveau}
-                        `;
-                        montrerNotification(`ðŸŽ‰ <b>Investissement rÃ©ussi !</b><br>${details}`, "success");
+                        const details = [
+                            `Investissement: ${montant.toLocaleString('fr-FR')} FCFA`,
+                            `ROI estimé: ${toFiniteNumber(result.projections.roi).toFixed(1)}%`,
+                            `Gain projeté: +${toFiniteNumber(result.projections.gainAnnuel).toLocaleString('fr-FR')} FCFA`,
+                            `Niveau de risque: ${result.projections.analyseRisque.niveau}`
+                        ].join(' | ');
+                        montrerNotification(`Investissement réussi. ${details}`, 'success');
                         window.location.href = '/dashboard.html';
                     }, 1000);
-
                 } catch (error) {
-                    msg.textContent = 'âŒ Erreur lors de l\'investissement: ' + error.message;
+                    msg.textContent = `Erreur lors de l'investissement: ${error.message}`;
                     msg.classList.add('error');
                     btn.disabled = false;
                     btn.textContent = 'Confirmer l\'Investissement';
@@ -228,22 +250,22 @@
         // Fonctions utilitaires
         function analyserRisqueProjet(projet) {
             let score = 100;
-            let facteurs = [];
+            const facteurs = [];
 
-            // Facteurs de risque basÃ©s sur les donnÃ©es du projet
+            // Facteurs de risque basés sur les données du projet
             if (projet.humidite < 40 || projet.humidite > 80) {
                 score -= 20;
-                facteurs.push('Conditions d\'humiditÃ© dÃ©favorables');
+                facteurs.push('Conditions d\'humidité défavorables');
             }
 
             if (projet.temperature < 15 || projet.temperature > 35) {
                 score -= 15;
-                facteurs.push('TempÃ©rature non optimale');
+                facteurs.push('Température non optimale');
             }
 
             if (projet.financement_actuel / projet.montant_besoin > 0.8) {
                 score -= 10;
-                facteurs.push('Projet presque entiÃ¨rement financÃ©');
+                facteurs.push('Projet presque entièrement financé');
             }
 
             if (projet.rendement_estime > 25) {
@@ -256,18 +278,18 @@
             if (score >= 80) {
                 niveau = 'Faible Risque';
                 couleur = '#2ea043';
-                icone = 'ðŸŸ¢';
+                icone = '🟢';
                 description = 'Conditions favorables pour ce projet agricole.';
             } else if (score >= 60) {
-                niveau = 'Risque ModÃ©rÃ©';
+                niveau = 'Risque Modéré';
                 couleur = '#d29922';
-                icone = 'ðŸŸ¡';
-                description = 'Risque acceptable avec quelques facteurs Ã  surveiller.';
+                icone = '🟡';
+                description = 'Risque acceptable avec quelques facteurs à surveiller.';
             } else {
-                niveau = 'Risque Ã‰levÃ©';
+                niveau = 'Risque Élevé';
                 couleur = '#f85149';
-                icone = 'ðŸ”´';
-                description = 'Risque significatif. Ã‰valuez soigneusement votre investissement.';
+                icone = '🔴';
+                description = 'Risque significatif. Évaluez soigneusement votre investissement.';
             }
 
             return { niveau, couleur, icone, description, facteurs, score };
@@ -275,10 +297,10 @@
 
         function getPaymentMethodName(methode) {
             const methods = {
-                'wave': 'ðŸ“± Wave',
-                'orange': 'ðŸ“² Orange Money',
-                'mtn': 'ðŸ“ž MTN MoMo',
-                'moov': 'ðŸ’³ Moov Money'
+                wave: '📱 Wave',
+                orange: '📲 Orange Money',
+                mtn: '📞 MTN MoMo',
+                moov: '💳 Moov Money'
             };
             return methods[methode] || methode;
         }
@@ -287,10 +309,13 @@
             const container = document.getElementById('notification-container');
             const notif = document.createElement('div');
             notif.className = `notification ${type}`;
-            notif.innerHTML = message;
+            notif.textContent = String(message ?? '');
             container.appendChild(notif);
             setTimeout(() => notif.classList.add('show'), 10);
-            setTimeout(() => { notif.classList.remove('show'); setTimeout(() => notif.remove(), 300); }, 4000);
+            setTimeout(() => {
+                notif.classList.remove('show');
+                setTimeout(() => notif.remove(), 300);
+            }, 4000);
         }
     </script>
 
@@ -322,3 +347,4 @@
     </style>
 </body>
 </html>
+
