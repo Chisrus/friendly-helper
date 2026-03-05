@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/svg+xml" href="/assets/agrikura-favicon.svg">
     <title>Administration | Agrikura</title>
+    <meta name="robots" content="noindex,nofollow,noarchive">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -22,40 +23,40 @@
         <div class="dashboard-header">
             <h1>Espace <span class="highlight">Administration</span></h1>
             <div class="dashboard-actions">
-                <button class="btn-export" id="btn-export-agri">ðŸ“„ PDF Agriculteurs</button>
-                <button class="btn-export" id="btn-export-inv">ðŸ“„ PDF Investisseurs</button>
-                <button class="btn-logout" id="btn-logout">DÃ©connexion</button>
+                <button class="btn-export" id="btn-export-agri">📄 PDF Agriculteurs</button>
+                <button class="btn-export" id="btn-export-inv">📄 PDF Investisseurs</button>
+                <button class="btn-logout" id="btn-logout">Déconnexion</button>
             </div>
         </div>
 
         <!-- Stats rapides -->
         <div class="admin-stats" id="admin-stats">
             <div class="admin-stat-card">
-                <div class="admin-stat-icon">ðŸŒ¾</div>
-                <div class="admin-stat-value" id="count-agri">â€”</div>
+                <div class="admin-stat-icon">🌾</div>
+                <div class="admin-stat-value" id="count-agri">—</div>
                 <div class="admin-stat-label">Agriculteurs inscrits</div>
             </div>
             <div class="admin-stat-card">
-                <div class="admin-stat-icon">ðŸ’°</div>
-                <div class="admin-stat-value" id="count-inv">â€”</div>
+                <div class="admin-stat-icon">💰</div>
+                <div class="admin-stat-value" id="count-inv">—</div>
                 <div class="admin-stat-label">Investisseurs inscrits</div>
             </div>
             <div class="admin-stat-card">
-                <div class="admin-stat-icon">ðŸ“Š</div>
-                <div class="admin-stat-value" id="total-besoin">â€”</div>
+                <div class="admin-stat-icon">📊</div>
+                <div class="admin-stat-value" id="total-besoin">—</div>
                 <div class="admin-stat-label">Total Besoin Financement</div>
             </div>
             <div class="admin-stat-card">
-                <div class="admin-stat-icon">ðŸ¦</div>
-                <div class="admin-stat-value" id="total-capacite">â€”</div>
-                <div class="admin-stat-label">Total CapacitÃ© Investissement</div>
+                <div class="admin-stat-icon">🏦</div>
+                <div class="admin-stat-value" id="total-capacite">—</div>
+                <div class="admin-stat-label">Total Capacité Investissement</div>
             </div>
         </div>
 
         <!-- Tabs -->
         <div class="admin-tabs">
-            <button class="admin-tab active" id="tab-agri">ðŸŒ¾ Agriculteurs</button>
-            <button class="admin-tab" id="tab-inv">ðŸ’° Investisseurs</button>
+            <button class="admin-tab active" id="tab-agri">🌾 Agriculteurs</button>
+            <button class="admin-tab" id="tab-inv">💰 Investisseurs</button>
         </div>
 
         <!-- Table Agriculteurs -->
@@ -64,13 +65,13 @@
                 <thead>
                     <tr>
                         <th>Nom</th>
-                        <th>PrÃ©nom</th>
+                        <th>Prénom</th>
                         <th>Contact</th>
                         <th>Email</th>
                         <th>Culture</th>
-                        <th>CapacitÃ© Champ</th>
+                        <th>Capacité Champ</th>
                         <th>Besoin (FCFA)</th>
-                        <th>En activitÃ©</th>
+                        <th>En activité</th>
                         <th>Date</th>
                     </tr>
                 </thead>
@@ -86,10 +87,10 @@
                 <thead>
                     <tr>
                         <th>Nom</th>
-                        <th>PrÃ©nom</th>
+                        <th>Prénom</th>
                         <th>Contact</th>
                         <th>Email</th>
-                        <th>CapacitÃ© (FCFA)</th>
+                        <th>Capacité (FCFA)</th>
                         <th>Date</th>
                     </tr>
                 </thead>
@@ -101,12 +102,24 @@
     </main>
 
     <script type="module">
-        import { requireAuth, deconnexion } from './auth.js';
+        import { requireAuth, deconnexion, isAdmin } from './auth.js';
         import { supabase } from './db.js';
         import jsPDF from 'jspdf';
         import 'jspdf-autotable';
 
         const ADMIN_GATE_KEY = 'agrikura_admin_gate';
+        const escapeHtml = (value) => String(value ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+        const formatDate = (value) => {
+            const d = new Date(value);
+            if (Number.isNaN(d.getTime())) return '-';
+            return d.toLocaleDateString('fr-FR');
+        };
+        const formatNumber = (value) => Number(value || 0).toLocaleString('fr-FR');
 
         (async () => {
             if (sessionStorage.getItem(ADMIN_GATE_KEY) !== 'open') {
@@ -116,8 +129,14 @@
 
             const user = await requireAuth();
             if (!user) return;
+            const adminOk = await isAdmin();
+            if (!adminOk) {
+                sessionStorage.removeItem(ADMIN_GATE_KEY);
+                window.location.href = '/admin-access.html';
+                return;
+            }
 
-            // Charger les donnÃ©es
+            // Charger les données
             const [agriRes, invRes] = await Promise.all([
                 supabase.from('inscriptions_agriculteurs').select('*').order('created_at', { ascending: false }),
                 supabase.from('inscriptions_investisseurs').select('*').order('created_at', { ascending: false })
@@ -141,15 +160,15 @@
             } else {
                 tbodyAgri.innerHTML = agriculteurs.map(a => `
                     <tr>
-                        <td>${a.nom}</td>
-                        <td>${a.prenom}</td>
-                        <td>${a.contact}</td>
-                        <td>${a.email || 'â€”'}</td>
-                        <td><span class="table-badge">${a.type_culture}</span></td>
-                        <td>${a.capacite_champs}</td>
-                        <td class="text-right">${(a.besoin_financement || 0).toLocaleString('fr-FR')}</td>
-                        <td>${a.en_activite ? 'âœ… Oui' : 'âŒ Non'}</td>
-                        <td>${new Date(a.created_at).toLocaleDateString('fr-FR')}</td>
+                        <td>${escapeHtml(a.nom)}</td>
+                        <td>${escapeHtml(a.prenom)}</td>
+                        <td>${escapeHtml(a.contact)}</td>
+                        <td>${escapeHtml(a.email || '-')}</td>
+                        <td><span class="table-badge">${escapeHtml(a.type_culture)}</span></td>
+                        <td>${escapeHtml(a.capacite_champs)}</td>
+                        <td class="text-right">${formatNumber(a.besoin_financement)}</td>
+                        <td>${a.en_activite ? 'Oui' : 'Non'}</td>
+                        <td>${formatDate(a.created_at)}</td>
                     </tr>
                 `).join('');
             }
@@ -161,12 +180,12 @@
             } else {
                 tbodyInv.innerHTML = investisseurs.map(i => `
                     <tr>
-                        <td>${i.nom}</td>
-                        <td>${i.prenom}</td>
-                        <td>${i.contact}</td>
-                        <td>${i.email || 'â€”'}</td>
-                        <td class="text-right">${(i.capacite_financement || 0).toLocaleString('fr-FR')}</td>
-                        <td>${new Date(i.created_at).toLocaleDateString('fr-FR')}</td>
+                        <td>${escapeHtml(i.nom)}</td>
+                        <td>${escapeHtml(i.prenom)}</td>
+                        <td>${escapeHtml(i.contact)}</td>
+                        <td>${escapeHtml(i.email || '-')}</td>
+                        <td class="text-right">${formatNumber(i.capacite_financement)}</td>
+                        <td>${formatDate(i.created_at)}</td>
                     </tr>
                 `).join('');
             }
@@ -194,16 +213,16 @@
             document.getElementById('btn-export-agri').addEventListener('click', () => {
                 const doc = new jsPDF({ orientation: 'landscape' });
                 doc.setFontSize(18);
-                doc.text('Agrikura â€” Liste des Agriculteurs', 14, 22);
+                doc.text('Agrikura — Liste des Agriculteurs', 14, 22);
                 doc.setFontSize(10);
-                doc.text('GÃ©nÃ©rÃ© le ' + new Date().toLocaleDateString('fr-FR'), 14, 30);
-                doc.text('Total: ' + agriculteurs.length + ' agriculteurs â€” Besoin total: ' + totalBesoin.toLocaleString('fr-FR') + ' FCFA', 14, 36);
+                doc.text('Généré le ' + new Date().toLocaleDateString('fr-FR'), 14, 30);
+                doc.text('Total: ' + agriculteurs.length + ' agriculteurs — Besoin total: ' + totalBesoin.toLocaleString('fr-FR') + ' FCFA', 14, 36);
 
                 doc.autoTable({
                     startY: 42,
-                    head: [['Nom', 'PrÃ©nom', 'Contact', 'Email', 'Culture', 'CapacitÃ© Champ', 'Besoin (FCFA)', 'En activitÃ©', 'Date']],
+                    head: [['Nom', 'Prénom', 'Contact', 'Email', 'Culture', 'Capacité Champ', 'Besoin (FCFA)', 'En activité', 'Date']],
                     body: agriculteurs.map(a => [
-                        a.nom, a.prenom, a.contact, a.email || 'â€”',
+                        a.nom, a.prenom, a.contact, a.email || '—',
                         a.type_culture, a.capacite_champs,
                         (a.besoin_financement || 0).toLocaleString('fr-FR'),
                         a.en_activite ? 'Oui' : 'Non',
@@ -221,16 +240,16 @@
             document.getElementById('btn-export-inv').addEventListener('click', () => {
                 const doc = new jsPDF();
                 doc.setFontSize(18);
-                doc.text('Agrikura â€” Liste des Investisseurs', 14, 22);
+                doc.text('Agrikura — Liste des Investisseurs', 14, 22);
                 doc.setFontSize(10);
-                doc.text('GÃ©nÃ©rÃ© le ' + new Date().toLocaleDateString('fr-FR'), 14, 30);
-                doc.text('Total: ' + investisseurs.length + ' investisseurs â€” CapacitÃ© totale: ' + totalCapacite.toLocaleString('fr-FR') + ' FCFA', 14, 36);
+                doc.text('Généré le ' + new Date().toLocaleDateString('fr-FR'), 14, 30);
+                doc.text('Total: ' + investisseurs.length + ' investisseurs — Capacité totale: ' + totalCapacite.toLocaleString('fr-FR') + ' FCFA', 14, 36);
 
                 doc.autoTable({
                     startY: 42,
-                    head: [['Nom', 'PrÃ©nom', 'Contact', 'Email', 'CapacitÃ© (FCFA)', 'Date']],
+                    head: [['Nom', 'Prénom', 'Contact', 'Email', 'Capacité (FCFA)', 'Date']],
                     body: investisseurs.map(i => [
-                        i.nom, i.prenom, i.contact, i.email || 'â€”',
+                        i.nom, i.prenom, i.contact, i.email || '—',
                         (i.capacite_financement || 0).toLocaleString('fr-FR'),
                         new Date(i.created_at).toLocaleDateString('fr-FR')
                     ]),
@@ -242,7 +261,7 @@
                 doc.save('agrikura-investisseurs.pdf');
             });
 
-            // DÃ©connexion
+            // Déconnexion
             document.getElementById('btn-logout').addEventListener('click', async () => {
                 await deconnexion();
                 sessionStorage.removeItem(ADMIN_GATE_KEY);
@@ -252,3 +271,4 @@
     </script>
 </body>
 </html>
+

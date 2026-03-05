@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/svg+xml" href="/assets/agrikura-favicon.svg">
     <title>Connexion Admin | Agrikura</title>
+    <meta name="robots" content="noindex,nofollow,noarchive">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -22,7 +23,7 @@
         <div class="auth-card">
             <div class="auth-header">
                 <h1>Connexion</h1>
-                <p>AccÃ©dez Ã  votre espace d'administration</p>
+                <p>Accédez à votre espace d'administration</p>
             </div>
             <form id="login-form" class="auth-form">
                 <div class="form-group">
@@ -31,13 +32,13 @@
                 </div>
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
-                    <input type="password" id="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required minlength="6">
+                    <input type="password" id="password" placeholder="••••••••" required minlength="6">
                 </div>
                 <button type="submit" class="btn-primary auth-btn" id="btn-login">Se Connecter</button>
                 <div id="auth-message" class="auth-message"></div>
             </form>
             <div class="auth-footer">
-                <p>Pas encore de compte ? <a href="/register.html">CrÃ©er un compte</a></p>
+                <p>Pas encore de compte ? <a href="/register.html">Créer un compte</a></p>
             </div>
         </div>
     </main>
@@ -45,11 +46,16 @@
     <script type="module">
         import { connexion, getUser } from './auth.js';
 
+        function getSafeRedirect() {
+            const redirect = new URLSearchParams(window.location.search).get('redirect') || '/';
+            if (!redirect.startsWith('/') || redirect.startsWith('//')) return '/';
+            return redirect;
+        }
+
         (async () => {
             const user = await getUser();
             if (user) {
-                const redirect = new URLSearchParams(window.location.search).get('redirect') || '/';
-                window.location.href = redirect;
+                window.location.href = getSafeRedirect();
             }
         })();
 
@@ -68,12 +74,12 @@
                     document.getElementById('email').value,
                     document.getElementById('password').value
                 );
-                msg.textContent = 'âœ… Connexion rÃ©ussie ! Redirection...';
+                msg.textContent = '✅ Connexion réussie ! Redirection...';
                 msg.classList.add('success');
-                const redirect = new URLSearchParams(window.location.search).get('redirect') || '/';
+                const redirect = getSafeRedirect();
                 setTimeout(() => window.location.href = redirect, 1000);
             } catch (err) {
-                msg.textContent = 'âŒ ' + (err.message === 'Invalid login credentials' ? 'Email ou mot de passe incorrect.' : err.message);
+                msg.textContent = '❌ ' + (err.message === 'Invalid login credentials' ? 'Email ou mot de passe incorrect.' : err.message);
                 msg.classList.add('error');
                 btn.disabled = false;
                 btn.textContent = 'Se Connecter';

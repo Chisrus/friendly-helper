@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/svg+xml" href="/assets/agrikura-favicon.svg">
-    <title>Acces Prive | Agrikura</title>
+    <title>Acces Admin Prive | Agrikura</title>
+    <meta name="robots" content="noindex,nofollow,noarchive">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -14,53 +15,65 @@
         <div class="auth-card">
             <div class="auth-header">
                 <h1>Acces Admin Prive</h1>
-                <p>Entrez le code d'acces pour ouvrir l'interface d'administration.</p>
+                <p>Connectez-vous avec un compte admin pour ouvrir l'interface d'administration.</p>
             </div>
 
             <form id="admin-access-form" class="auth-form">
-                <div class="form-group">
-                    <label for="admin-code">Code secret</label>
-                    <input type="password" id="admin-code" placeholder="Code admin" required>
-                </div>
-                <button type="submit" class="btn-primary auth-btn" id="btn-admin-access">Acceder</button>
+                <button type="submit" class="btn-primary auth-btn" id="btn-admin-access">Continuer vers la connexion admin</button>
+                <button type="button" class="btn-secondary auth-btn" id="btn-admin-logout" style="display: none;">Se deconnecter et reessayer</button>
                 <div id="admin-access-message" class="auth-message"></div>
             </form>
         </div>
     </main>
 
     <script type="module">
-        const ACCESS_CODE = (import.meta.env.VITE_ADMIN_ACCESS_CODE || 'AGK-ADMIN-2026').trim();
+        import { deconnexion, getUser, isAdmin } from './auth.js';
+
         const STORAGE_KEY = 'agrikura_admin_gate';
+        const LOGIN_URL = '/login.html?redirect=%2Fadmin-access.html';
 
         const form = document.getElementById('admin-access-form');
         const msg = document.getElementById('admin-access-message');
         const btn = document.getElementById('btn-admin-access');
-
-        if (sessionStorage.getItem(STORAGE_KEY) === 'open') {
-            window.location.href = '/login.html?redirect=%2Fdashboard.html';
-        }
+        const logoutBtn = document.getElementById('btn-admin-logout');
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            btn.disabled = true;
-            msg.textContent = '';
-            msg.className = 'auth-message';
+            window.location.href = LOGIN_URL;
+        });
 
-            const code = document.getElementById('admin-code').value.trim();
-            if (code !== ACCESS_CODE) {
-                msg.textContent = 'Code incorrect.';
+        logoutBtn.addEventListener('click', async () => {
+            logoutBtn.disabled = true;
+            await deconnexion();
+            sessionStorage.removeItem(STORAGE_KEY);
+            window.location.href = LOGIN_URL;
+        });
+
+        (async () => {
+            const user = await getUser();
+            if (!user) return;
+
+            btn.disabled = true;
+            btn.textContent = 'Verification des droits...';
+            msg.className = 'auth-message';
+            msg.textContent = '';
+
+            const adminOk = await isAdmin();
+            if (!adminOk) {
+                sessionStorage.removeItem(STORAGE_KEY);
+                msg.textContent = 'Ce compte est connecte mais n\'a pas le role admin.';
                 msg.classList.add('error');
                 btn.disabled = false;
+                btn.textContent = 'Continuer vers la connexion admin';
+                logoutBtn.style.display = 'inline-flex';
                 return;
             }
 
             sessionStorage.setItem(STORAGE_KEY, 'open');
-            msg.textContent = 'Acces valide. Redirection...';
+            msg.textContent = 'Acces admin valide. Redirection...';
             msg.classList.add('success');
-            setTimeout(() => {
-                window.location.href = '/login.html?redirect=%2Fdashboard.html';
-            }, 350);
-        });
+            window.location.href = '/dashboard.html';
+        })();
     </script>
 </body>
 </html>

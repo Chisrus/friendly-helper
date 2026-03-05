@@ -85,6 +85,16 @@ export async function requireAuth() {
     return user;
 }
 
+// Vérifier si l'utilisateur connecté est admin (via fonction SQL sécurisée)
+export async function isAdmin() {
+    const { data, error } = await supabase.rpc('is_admin_user');
+    if (error) {
+        console.error('Erreur vérification admin:', error);
+        return false;
+    }
+    return data === true;
+}
+
 // Mettre à jour la navbar selon l'état d'auth
 export async function updateNavAuth() {
     const user = await getUser();
